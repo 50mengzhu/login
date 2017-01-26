@@ -66,14 +66,18 @@
                 android:id="@+id/login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
+                android:layout_marginBottom="16dp"
                 android:layout_marginTop="12dp"
-                android:text="Login"/>
+                android:background="@drawable/r_button"
+                android:text="Login"
+                android:textSize="18sp"
+                android:textAllCaps="false"
+                android:textColor="#fff"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="26dp"
                 android:gravity="center"
                 android:text="Create a New Account"
                 android:textColor="#333"/>
