@@ -38,7 +38,8 @@
                 android:id="@+id/username_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLines="1"/>
+                android:maxLines="1"
+                android:singleLine="true"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -52,7 +53,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
                 android:inputType="textPassword"
-                android:maxLines="1"/>
+                android:maxLines="1"
+                android:singleLine="true"/>
 
             <TextView
                 android:id="@+id/forget_password"
@@ -112,7 +114,8 @@
                 android:id="@+id/username_r_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLines="1"/>
+                android:maxLines="1"
+                android:singleLine="true"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -126,7 +129,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
                 android:inputType="textPassword"
-                android:maxLines="1"/>
+                android:maxLines="1"
+                android:singleLine="true"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -156,8 +160,6 @@
                 android:textColor="#333"
                 android:onClick="logIn"/>
         </LinearLayout>
-
-
     </LinearLayout>
 
 </android.support.percent.PercentFrameLayout>

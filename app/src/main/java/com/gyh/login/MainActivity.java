@@ -1,24 +1,33 @@
 package com.gyh.login;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.gyh.login.db.User;
+
+import org.litepal.crud.DataSupport;
+
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MainActivity extends AppCompatActivity {
 
     private ImageView bgPicImg;
     private LinearLayout registPart;
-    private LinearLayout loginPart;
-
-    private int height;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +50,66 @@ public class MainActivity extends AppCompatActivity {
         }
 
         registPart = (LinearLayout) findViewById(R.id.regist_part);
-        loginPart = (LinearLayout) findViewById(R.id.login_part);
-        height = registPart.getHeight();
+
+        Button login = (Button) findViewById(R.id.login);
+        Button regist = (Button) findViewById(R.id.regist);
+        final EditText usernameRInput = (EditText) findViewById(R.id.username_r_input);
+        final EditText passwordRInput = (EditText) findViewById(R.id.password_r_input);
+        final EditText usernameInput = (EditText) findViewById(R.id.username_input);
+        final EditText passwordInput = (EditText) findViewById(R.id.password_input);
+        // 登录检查逻辑
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String username = usernameInput.getText().toString();
+                String password = passwordInput.getText().toString();
+                if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)) {
+                    List<User> users = DataSupport.findAll(User.class);
+                    for (User user : users) {
+                        if (user.getUsername().equals(username)) {
+                            if (user.getPassword().equals(password)) {
+                                Toast.makeText(MainActivity.this, "Login Successfully", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(MainActivity.this, Index.class);
+                                intent.putExtra("username", username);
+                                intent.putExtra("password", password);
+                                startActivity(intent);
+                                finish();
+                            }
+                            return;
+                        }
+                    }
+                    Toast.makeText(MainActivity.this, "Username and Password may be wrong!", Toast.LENGTH_SHORT).show();
+                    usernameInput.setText("");
+                } else {
+                    Toast.makeText(MainActivity.this, "Username and Password can be empty!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        // 注册逻辑
+        regist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                User user = new User();
+                String username = usernameRInput.getText().toString();
+                String password = passwordRInput.getText().toString();
+                if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)) {
+                    String regEx="[`~!@#$%^&*()+=|{}':;,\\[\\].<>/?！￥…（）—【】‘；：”“’。，、？]";
+                    Pattern p = Pattern.compile(regEx);
+                    Matcher m = p.matcher(username);
+                    Matcher n = p.matcher(password);
+                    if( m.find() || n.find()){
+                        Toast.makeText(MainActivity.this, "Username and Password can't have special characters!", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    user.setPassword(password);
+                    user.setUsername(username);
+                    user.save();
+                    Toast.makeText(MainActivity.this, "Register Successfully", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(MainActivity.this, "Username and Password can be empty!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     /**
@@ -53,8 +120,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     *
-     * @param view
+     * 切换成登陆界面
      */
     public void logIn(View view) {
         if (Build.VERSION.SDK_INT >= 16) {
@@ -70,6 +136,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 切换成注册界面
+     */
     public void regist(View view) {
         if (Build.VERSION.SDK_INT >= 16) {
             registPart.animate().withStartAction(new Runnable() {
