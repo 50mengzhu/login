@@ -80,9 +80,83 @@
                 android:layout_marginBottom="26dp"
                 android:gravity="center"
                 android:text="Create a New Account"
-                android:textColor="#333"/>
+                android:textColor="#333"
+                android:onClick="regist"/>
         </LinearLayout>
-            
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/regist_part"
+        android:orientation="horizontal"
+        android:layout_gravity="center|bottom"
+        android:gravity="center"
+        app:layout_widthPercent="88%"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:weightSum="1">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.78">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:textColor="#999"
+                android:text="Username" />
+
+            <EditText
+                android:id="@+id/username_r_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#999"
+                android:text="Password" />
+
+            <EditText
+                android:id="@+id/password_r_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:inputType="textPassword"
+                android:maxLines="1"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Remember Your Password"
+                android:textColor="#999"/>
+
+            <Button
+                android:id="@+id/regist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/r_button"
+                android:text="Regist"
+                android:textSize="18sp"
+                android:textAllCaps="false"
+                android:textColor="#fff"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="26dp"
+                android:gravity="center"
+                android:text="Login"
+                android:textColor="#333"
+                android:onClick="logIn"/>
+        </LinearLayout>
+
 
     </LinearLayout>
 
