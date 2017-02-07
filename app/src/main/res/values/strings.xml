@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">Login</string>
+    <string name="app_name">Route</string>
+    <string name="nav_info">账号</string>
+    <string name="nav_friends">朋友</string>
+    <string name="nav_setting">设置</string>
+    <string name="nav_help">帮助和反馈</string>
+    <string name="nav_about">关于 Route</string>
 </resources>
