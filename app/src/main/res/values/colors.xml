@@ -4,4 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="topbar">#33000000</color>
+    <color name="tabfont">#9E9E9E</color>
+    <color name="tabselected">#1e88e5</color>
+    <color name="tablayout">#eceff1</color>
 </resources>

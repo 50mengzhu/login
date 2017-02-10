@@ -1,4 +1,4 @@
-package com.gyh.login;
+package com.gyh.login.util;
 
 import android.content.Context;
 import android.os.Handler;
@@ -9,9 +9,6 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.widget.FrameLayout;
-
-import com.gyh.login.util.DataSetSubscriber;
-import com.gyh.login.util.ViewPagerAdapter;
 
 public class BannerViewPager extends FrameLayout implements ViewPager.OnPageChangeListener {
 

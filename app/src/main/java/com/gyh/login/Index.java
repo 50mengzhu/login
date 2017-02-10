@@ -3,6 +3,8 @@ package com.gyh.login;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -13,6 +15,8 @@ import android.widget.ImageView;
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.gyh.login.db.Ad;
 import com.gyh.login.util.AdLab;
+import com.gyh.login.util.BannerViewPager;
+import com.gyh.login.util.MyFragmentPagerAdapter;
 import com.gyh.login.util.OnPageClickListener;
 import com.gyh.login.util.ViewPagerAdapter;
 
@@ -69,6 +73,14 @@ public class Index extends AppCompatActivity {
                 return false;
             }
         });
+
+        ViewPager viewPager = (ViewPager) findViewById(R.id.main_pager);
+        MyFragmentPagerAdapter adapter = new MyFragmentPagerAdapter(getSupportFragmentManager(),
+                this);
+        viewPager.setAdapter(adapter);
+
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     private void createViews() {
