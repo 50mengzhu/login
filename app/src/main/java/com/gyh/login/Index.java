@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
+import com.bumptech.glide.Glide;
 import com.gyh.login.db.Ad;
 import com.gyh.login.util.AdLab;
 import com.gyh.login.util.BannerViewPager;
@@ -100,7 +101,7 @@ public class Index extends AppCompatActivity {
 
     private void addView(List<Ad> ads, int index) {
         ImageView iv = (ImageView) LayoutInflater.from(Index.this).inflate(R.layout.ad_item, mBannerViewPager, false);
-        iv.setImageResource(ads.get(index).getImageId());
+        Glide.with(Index.this).load(ads.get(index).getImageId()).into(iv);
         mViews.add(iv);
     }
 }

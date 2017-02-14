@@ -3,10 +3,17 @@ package com.gyh.login;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+
+import com.gyh.login.db.Route;
+import com.gyh.login.util.RouteLab;
+import com.gyh.login.util.RoutesAdapter;
+
+import java.util.List;
 
 public class PageFragment extends Fragment {
     public static final String ARGS_PAGE = "args_page";
@@ -31,8 +38,19 @@ public class PageFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_index, container, false);
-        TextView textView = (TextView) view.findViewById(R.id.textview);
-        textView.setText("第" + mPage + "页");
+
+        if (mPage == 1) {
+            RouteLab routeLab = RouteLab.get(getContext());
+            List<Route> routes = routeLab.getRoutes();
+
+            RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.route_items);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+            layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+            recyclerView.setLayoutManager(layoutManager);
+            RoutesAdapter adapter = new RoutesAdapter(routes);
+            recyclerView.setAdapter(adapter);
+        }
+
         return view;
     }
 }

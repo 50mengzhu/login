@@ -8,7 +8,7 @@ import com.gyh.login.PageFragment;
 
 public class MyFragmentPagerAdapter extends FragmentPagerAdapter{
     public final int COUNT = 3;
-    private String[] titles = new String[]{"Tab1", "Tab2", "Tab3"};
+    private String[] titles = new String[]{"路线", "广场", "其他"};
     private Context mContext;
 
     public MyFragmentPagerAdapter(FragmentManager fm, Context context) {
