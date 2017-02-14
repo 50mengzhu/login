@@ -5,4 +5,6 @@
     <string name="nav_setting">设置</string>
     <string name="nav_help">帮助和反馈</string>
     <string name="nav_about">关于 Route</string>
+    <string name="route_title">路线</string>
+    <string name="to_all">查看全部</string>
 </resources>
