@@ -44,15 +44,15 @@ public class Index extends AppCompatActivity {
         mAdapter = new ViewPagerAdapter(mViews, new OnPageClickListener() {
             @Override
             public void onPageClick(View view, int position) {
-
             }
         });
         mBannerViewPager.setAdapter(mAdapter);
 
+
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mSearchView= (FloatingSearchView) findViewById(R.id.search_view);
 
-        // 搜索逻辑
+        //搜索逻辑
         mSearchView.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
             @Override
             public void onSearchTextChanged(String oldQuery, final String newQuery) {
@@ -60,7 +60,7 @@ public class Index extends AppCompatActivity {
                 //get suggestions based on newQuery
 
                 //pass them on to the search view
-//                mSearchView.swapSuggestions(newSuggestions);
+                //mSearchView.swapSuggestions(newSuggestions);
             }
         });
         // 添加侧边栏
@@ -83,6 +83,7 @@ public class Index extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
     }
+
 
     private void createViews() {
         AdLab adLab = AdLab.get(Index.this);

@@ -60,7 +60,6 @@ public class BannerViewPager extends FrameLayout implements ViewPager.OnPageChan
         this.mContext = context;
         initViews();
     }
-
     private void initViews() {
         //initialize the viewpager
         mViewPager = new ViewPager(mContext);

@@ -43,11 +43,18 @@ public class PageFragment extends Fragment {
             RouteLab routeLab = RouteLab.get(getContext());
             List<Route> routes = routeLab.getRoutes();
 
-            RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.route_items);
+            RecyclerView routeItems = (RecyclerView) view.findViewById(R.id.route_items);
             LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
             layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-            recyclerView.setLayoutManager(layoutManager);
+            routeItems.setLayoutManager(layoutManager);
             RoutesAdapter adapter = new RoutesAdapter(routes);
+            routeItems.setAdapter(adapter);
+
+            RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.team_items);
+            layoutManager = new LinearLayoutManager(getContext());
+            layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+            recyclerView.setLayoutManager(layoutManager);
+            adapter = new RoutesAdapter(routes);
             recyclerView.setAdapter(adapter);
         }
 

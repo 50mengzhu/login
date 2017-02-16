@@ -1,93 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+
+<android.support.v4.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v4.widget.DrawerLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/drawer_layout"
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <FrameLayout
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appBar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:background="@color/tablayout">
+
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:contentScrim="@color/tablayout"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+                <com.gyh.login.util.BannerViewPager
+                    android:id="@+id/banner"
+                    android:layout_width="match_parent"
+                    android:layout_height="225dp"
+                    app:layout_collapseMode="pin"/>
+
+                <android.support.v7.widget.Toolbar
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    app:layout_collapseMode="pin"/>
+            </android.support.design.widget.CollapsingToolbarLayout>
+
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tab_layout"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                app:tabGravity="fill"
+                app:tabMode="fixed"
+                app:tabBackground="@color/tablayout"
+                app:tabIndicatorColor="@color/tabselected"
+                app:tabIndicatorHeight="4dp"
+                app:tabSelectedTextColor="@color/tabselected"
+                app:tabTextColor="@color/tabfont"
+                app:layout_collapseMode="pin"/>
+
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <android.support.design.widget.AppBarLayout
-                    android:id="@+id/appBar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <android.support.design.widget.CollapsingToolbarLayout
-                        android:id="@+id/collapsing_toolbar"
-                        android:layout_width="match_parent"
-                        android:layout_height="275dp"
-                        android:background="@android:color/transparent"
-                        app:contentScrim="@color/tablayout"
-                        app:layout_scrollFlags="scroll|exitUntilCollapsed">
-
-                        <com.gyh.login.util.BannerViewPager
-                            android:id="@+id/banner"
-                            android:layout_width="match_parent"
-                            android:layout_marginTop="-25dp"
-                            android:layout_height="250dp"
-                            app:layout_collapseMode="pin"/>
-
-                        <android.support.design.widget.TabLayout
-                            android:id="@+id/tab_layout"
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:layout_marginTop="225dp"
-                            app:tabGravity="fill"
-                            app:tabMode="fixed"
-                            app:tabBackground="@color/tablayout"
-                            app:tabIndicatorColor="@color/tabselected"
-                            app:tabIndicatorHeight="4dp"
-                            app:tabSelectedTextColor="@color/tabselected"
-                            app:tabTextColor="@color/tabfont"
-                            app:layout_collapseMode="pin"/>
-                    </android.support.design.widget.CollapsingToolbarLayout>
-                </android.support.design.widget.AppBarLayout>
-                
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="8dp"
-                    android:background="@drawable/shadow"/>
+                android:layout_height="match_parent">
 
                 <android.support.v4.view.ViewPager
                     android:id="@+id/main_pager"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
+                    android:layout_height="700dp"/>
+
             </LinearLayout>
 
-            <com.arlib.floatingsearchview.FloatingSearchView
-                android:id="@+id/search_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingTop="24dp"
-                app:floatingSearch_searchBarMarginLeft="@dimen/search_view_inset"
-                app:floatingSearch_searchBarMarginTop="@dimen/search_view_inset"
-                app:floatingSearch_searchBarMarginRight="@dimen/search_view_inset"
-                app:floatingSearch_searchHint="Search..."
-                app:floatingSearch_showSearchKey="false"
-                app:floatingSearch_leftActionMode="showHamburger"/>
-        </FrameLayout>
+        </android.support.v4.widget.NestedScrollView>
 
-        <android.support.design.widget.NavigationView
-            android:id="@+id/nav_view"
+        <com.arlib.floatingsearchview.FloatingSearchView
+            android:id="@+id/search_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="start"
-            app:menu="@menu/nav_menu"
-            app:headerLayout="@layout/nav_header"/>
-    </android.support.v4.widget.DrawerLayout>
-    
-</android.support.design.widget.CoordinatorLayout>
+            android:paddingTop="24dp"
+            app:floatingSearch_searchBarMarginLeft="@dimen/search_view_inset"
+            app:floatingSearch_searchBarMarginTop="@dimen/search_view_inset"
+            app:floatingSearch_searchBarMarginRight="@dimen/search_view_inset"
+            app:floatingSearch_searchHint="Search..."
+            app:floatingSearch_showSearchKey="false"
+            app:floatingSearch_leftActionMode="showHamburger"
+            android:translationZ="100dp"/>
+
+    </android.support.design.widget.CoordinatorLayout>
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:menu="@menu/nav_menu"
+        app:headerLayout="@layout/nav_header"/>
+
+</android.support.v4.widget.DrawerLayout>
