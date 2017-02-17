@@ -37,25 +37,34 @@ public class PageFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_index, container, false);
+
+        View view = null;
 
         if (mPage == 1) {
+            view = inflater.inflate(R.layout.fragment_index, container, false);
+
             RouteLab routeLab = RouteLab.get(getContext());
             List<Route> routes = routeLab.getRoutes();
 
             RecyclerView routeItems = (RecyclerView) view.findViewById(R.id.route_items);
+            routeItems.setNestedScrollingEnabled(false);
             LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
             layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             routeItems.setLayoutManager(layoutManager);
             RoutesAdapter adapter = new RoutesAdapter(routes);
             routeItems.setAdapter(adapter);
 
-            RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.team_items);
+            RecyclerView teamItems = (RecyclerView) view.findViewById(R.id.team_items);
+            teamItems.setNestedScrollingEnabled(false);
             layoutManager = new LinearLayoutManager(getContext());
             layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-            recyclerView.setLayoutManager(layoutManager);
+            teamItems.setLayoutManager(layoutManager);
             adapter = new RoutesAdapter(routes);
-            recyclerView.setAdapter(adapter);
+            teamItems.setAdapter(adapter);
+        } else if (mPage == 2) {
+            view = inflater.inflate(R.layout.fragment_public, container, false);
+        } else if (mPage == 3) {
+            view = inflater.inflate(R.layout.fragment_other, container, false);
         }
 
         return view;

@@ -6,6 +6,7 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -39,6 +40,9 @@ public class Index extends AppCompatActivity {
         setContentView(R.layout.activity_index);
 
         createViews();
+
+        NestedScrollView scrollView = (NestedScrollView) findViewById (R.id.nest_scrollview);
+        scrollView.setFillViewport (true);
 
         mBannerViewPager = (BannerViewPager) findViewById(R.id.banner);
         mAdapter = new ViewPagerAdapter(mViews, new OnPageClickListener() {
