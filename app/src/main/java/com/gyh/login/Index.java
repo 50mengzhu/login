@@ -1,6 +1,7 @@
 package com.gyh.login;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.bumptech.glide.Glide;
@@ -25,6 +27,8 @@ import com.gyh.login.util.ViewPagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Index extends AppCompatActivity {
 
@@ -79,10 +83,16 @@ public class Index extends AppCompatActivity {
                 item.setChecked(false);
                 switch (item.getItemId()) {
                     case R.id.nav_information:
-                            Intent intent = new Intent(Index.this, UserIndex.class);
-                            mDrawerLayout.closeDrawers();
-                            startActivity(intent);
                         break;
+                    case R.id.nav_logout:
+                        SharedPreferences sharedPreferences = getSharedPreferences("config", 0);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("username", "");
+                        editor.putString("password", "");
+                        editor.apply();
+                        Intent intent = new Intent(Index.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
                 }
                 return true;
             }
@@ -95,6 +105,28 @@ public class Index extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
+
+        final String name = getIntent().getStringExtra("name");
+        final String intro = getIntent().getStringExtra("intro");
+
+        NavigationView header = (NavigationView) findViewById(R.id.nav_view);
+        View headerView = header.getHeaderView(0);
+
+        CircleImageView mIcon;
+        mIcon = (CircleImageView) headerView.findViewById(R.id.icon_image);
+        mIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Index.this, UserIndex.class);
+                intent.putExtra("name", name);
+                intent.putExtra("intro", intro);
+                startActivity(intent);
+            }
+        });
+        TextView user_name = (TextView) headerView.findViewById(R.id.name);
+        user_name.setText(name);
+        TextView user_intro = (TextView) headerView.findViewById(R.id.intro);
+        user_intro.setText(intro);
     }
 
 

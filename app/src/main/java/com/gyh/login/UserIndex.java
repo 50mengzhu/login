@@ -28,6 +28,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import static com.gyh.login.R.id.user_lv_name;
+
 public class UserIndex extends AppCompatActivity {
 
     // 控制ToolBar的变量
@@ -55,7 +57,7 @@ public class UserIndex extends AppCompatActivity {
         mIvBg = (ImageView) findViewById(R.id.user_iv_bg);
         mAppBarLayout = (AppBarLayout) findViewById(R.id.user_appbar);
         mToolbar = (Toolbar) findViewById(R.id.user_toolbar);
-        mUsername = (TextView) findViewById(R.id.user_lv_name);
+        mUsername = (TextView) findViewById(user_lv_name);
         mUserintro = (TextView) findViewById(R.id.user_lv_intro);
         mTitleContainer = (FrameLayout) findViewById(R.id.user_lv_title);
         mLlTitleContainer = (LinearLayout) findViewById(R.id.user_ll_title);
@@ -78,6 +80,14 @@ public class UserIndex extends AppCompatActivity {
                 handleAlphaOnTitle(percentage);
             }
         });
+
+        String name = getIntent().getStringExtra("name");
+        String intro = getIntent().getStringExtra("intro");
+
+        TextView lv_name = (TextView) findViewById(R.id.user_lv_name);
+        TextView lv_intro = (TextView) findViewById(R.id.user_lv_intro);
+        lv_name.setText(name);
+        lv_intro.setText(intro);
     }
 
 

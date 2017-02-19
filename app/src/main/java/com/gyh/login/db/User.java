@@ -7,6 +7,25 @@ public class User extends DataSupport {
     private int id;
     private String username;
     private String password;
+    private String name;
+
+    public String getIntro() {
+        return intro;
+    }
+
+    public void setIntro(String intro) {
+        this.intro = intro;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    private String intro;
 
     public int getId() {
         return id;
