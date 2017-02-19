@@ -8,4 +8,7 @@
     <string name="route_title">路线</string>
     <string name="team_title">组团</string>
     <string name="to_all">查看全部</string>
+    <string name="user_name">Gu Yuhong</string>
+    <string name="user_accout">gu18168@gmail.com</string>
+    <string name="edit">个人资料</string>
 </resources>

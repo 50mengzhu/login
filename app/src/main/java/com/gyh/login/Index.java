@@ -1,5 +1,6 @@
 package com.gyh.login;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -75,7 +76,15 @@ public class Index extends AppCompatActivity {
         navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                return false;
+                item.setChecked(false);
+                switch (item.getItemId()) {
+                    case R.id.nav_information:
+                            Intent intent = new Intent(Index.this, UserIndex.class);
+                            mDrawerLayout.closeDrawers();
+                            startActivity(intent);
+                        break;
+                }
+                return true;
             }
         });
 
