@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,7 +25,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class MainActivity extends AppCompatActivity {
+public class Login extends AppCompatActivity {
 
     private ImageView bgPicImg;
     private LinearLayout registPart;
@@ -46,21 +45,20 @@ public class MainActivity extends AppCompatActivity {
             getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
 
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
 
         // 已登录，自动登陆逻辑
         SharedPreferences sharedPreferences = getSharedPreferences("config", 0);
         String name = sharedPreferences.getString("username", "");
         String pass = sharedPreferences.getString("password", "");
-        Log.d("Test", "onCreate: +" + name + " + " + pass);
         if (!name.equals("") && !pass.equals("")) {
-            Log.d("Test", "onCreate: !");
             User user = findUser(name, pass);
             if (user != null) {
                 logIn(user);
             }
         }
 
+        // 设置背景图片
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         bgPicImg = (ImageView) findViewById(R.id.bg_img);
         String bgPic = prefs.getString("bg_pic", null);
@@ -87,16 +85,16 @@ public class MainActivity extends AppCompatActivity {
                 if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)) {
                     User user = findUser(username, MD5Util.getMD5(password));
                     if (user != null) {
-                        Toast.makeText(MainActivity.this, "Login Successfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Login.this, "Login Successfully", Toast.LENGTH_SHORT).show();
                         saveInfo(user);
                         logIn(user);
                     } else {
-                        Toast.makeText(MainActivity.this, "Username and Password may be wrong!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Login.this, "Username and Password may be wrong!", Toast.LENGTH_SHORT).show();
                         usernameInput.setText("");
                         passwordInput.setText("");
                     }
                 } else {
-                    Toast.makeText(MainActivity.this, "Username and Password can't be empty!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Login.this, "Username and Password can't be empty!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -113,20 +111,19 @@ public class MainActivity extends AppCompatActivity {
                     Matcher m = p.matcher(username);
                     Matcher n = p.matcher(password);
                     if( m.find() || n.find()){
-                        Toast.makeText(MainActivity.this, "Username and Password can't have special characters!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(Login.this, "Username and Password can't have special characters!", Toast.LENGTH_LONG).show();
                         return;
                     }
-                    Log.d("Test", "Regist: +" + username + " + " + MD5Util.getMD5(password));
                     user.setPassword(MD5Util.getMD5(password));
                     user.setUsername(username);
                     user.setName(username);
                     user.setIntro("一句话介绍一下你自己");
                     user.save();
                     saveInfo(user);
-                    Toast.makeText(MainActivity.this, "Register Successfully", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Login.this, "Register Successfully", Toast.LENGTH_SHORT).show();
                     logIn(user);
                 } else {
-                    Toast.makeText(MainActivity.this, "Username and Password can be empty!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Login.this, "Username and Password can be empty!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -172,6 +169,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 储存登录信息
+     * @param user 已成功登录的用户
+     */
     private void saveInfo(User user) {
         SharedPreferences sharedPreferences = getSharedPreferences("config", 0);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -180,6 +181,12 @@ public class MainActivity extends AppCompatActivity {
         editor.apply();
     }
 
+    /**
+     * 通过账号密码寻找用户
+     * @param username 用户名
+     * @param password 密码
+     * @return
+     */
     private User findUser(String username, String password) {
         for (User user : users) {
             if (user.getUsername().equals(username)) {
@@ -191,10 +198,13 @@ public class MainActivity extends AppCompatActivity {
         return null;
     }
 
+    /**
+     * 登录成功，跳转页面，传递用户
+     * @param user
+     */
     private void logIn(User user) {
-        Intent intent = new Intent(MainActivity.this, Index.class);
-        intent.putExtra("name", user.getName());
-        intent.putExtra("intro", user.getIntro());
+        Intent intent = new Intent(Login.this, Index.class);
+        intent.putExtra("user", user);
         startActivity(intent);
         finish();
     }

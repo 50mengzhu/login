@@ -6,10 +6,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.bumptech.glide.Glide;
 import com.gyh.login.db.Ad;
+import com.gyh.login.db.User;
 import com.gyh.login.util.AdLab;
 import com.gyh.login.util.BannerViewPager;
 import com.gyh.login.util.MyFragmentPagerAdapter;
@@ -85,12 +88,13 @@ public class Index extends AppCompatActivity {
                     case R.id.nav_information:
                         break;
                     case R.id.nav_logout:
+                        // 退出登录逻辑，清空记录
                         SharedPreferences sharedPreferences = getSharedPreferences("config", 0);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putString("username", "");
                         editor.putString("password", "");
                         editor.apply();
-                        Intent intent = new Intent(Index.this, MainActivity.class);
+                        Intent intent = new Intent(Index.this, Login.class);
                         startActivity(intent);
                         finish();
                 }
@@ -106,20 +110,29 @@ public class Index extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
 
-        final String name = getIntent().getStringExtra("name");
-        final String intro = getIntent().getStringExtra("intro");
+        final User user = getIntent().getParcelableExtra("user");
+        final String name = user.getName();
+        final String intro = user.getIntro();
 
-        NavigationView header = (NavigationView) findViewById(R.id.nav_view);
-        View headerView = header.getHeaderView(0);
+
+        Log.d("test", "name: " + name);
+        Log.d("test", "intro: " + intro);
+        Log.d("test", "username: " + user.getUsername());
+        Log.d("test", "password: " + user.getPassword());
+
+
+
+
+        View headerView = navView.getHeaderView(0);
 
         CircleImageView mIcon;
         mIcon = (CircleImageView) headerView.findViewById(R.id.icon_image);
         mIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mDrawerLayout.closeDrawer(GravityCompat.START);
                 Intent intent = new Intent(Index.this, UserIndex.class);
-                intent.putExtra("name", name);
-                intent.putExtra("intro", intro);
+                intent.putExtra("user", user);
                 startActivity(intent);
             }
         });

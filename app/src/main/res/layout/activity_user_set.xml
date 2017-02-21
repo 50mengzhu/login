@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.gyh.login.UserSet">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/set_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:paddingTop="24dp"
+        android:background="#EEEEEE"
+        android:title="@string/edit"/>
+
+    <LinearLayout
+        android:id="@+id/set_title"
+        android:layout_below="@id/set_toolbar"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:background="#ECEFF1">
+
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="24dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/set_title"
+            android:textColor="#000"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="5dp"
+            android:text="@string/set_title_sub"/>
+    </LinearLayout>
+
+    <View
+        android:layout_below="@id/set_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:background="@drawable/shadow"/>
+
+    <View
+        android:id="@+id/sep_1"
+        android:layout_below="@id/set_title"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#CFD8DC"/>
+
+    <LinearLayout
+        android:id="@+id/name_title"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp"
+        android:layout_below="@id/sep_1"
+        android:orientation="horizontal"
+        android:background="#ECEFF1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_marginStart="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/ic_name_label"/>
+
+        <TextView
+            android:layout_marginStart="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/set_name"
+            android:textSize="13sp"
+            android:textColor="#424242"/>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/sep_2"
+        android:layout_below="@id/name_title"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#CFD8DC"/>
+
+    <LinearLayout
+        android:id="@+id/set_name"
+        android:layout_below="@id/sep_2"
+        android:layout_width="match_parent"
+        android:layout_height="52dp">
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:layout_marginStart="24dp"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            tools:text="GYH"/>
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center|end"
+            android:layout_marginEnd="20dp"
+            android:src="@drawable/ic_set"/>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/sep_3"
+        android:layout_below="@id/set_name"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#CFD8DC"/>
+
+    <LinearLayout
+        android:id="@+id/intro_title"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp"
+        android:layout_below="@id/sep_3"
+        android:orientation="horizontal"
+        android:background="#ECEFF1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_marginStart="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/ic_intro_label"/>
+
+        <TextView
+            android:layout_marginStart="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/set_intro"
+            android:textSize="13sp"
+            android:textColor="#424242"/>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/sep_4"
+        android:layout_below="@id/intro_title"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#CFD8DC"/>
+
+    <LinearLayout
+        android:id="@+id/set_intro"
+        android:layout_below="@id/sep_4"
+        android:layout_width="match_parent"
+        android:layout_height="52dp">
+
+        <TextView
+            android:id="@+id/intro"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:layout_marginStart="24dp"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            tools:text="一句话介绍一下你自己"/>
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center|end"
+            android:layout_marginEnd="20dp"
+            android:src="@drawable/ic_set"/>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/sep_5"
+        android:layout_below="@id/set_intro"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#CFD8DC"/>
+
+</RelativeLayout>

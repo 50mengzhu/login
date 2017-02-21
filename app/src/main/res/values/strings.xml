@@ -12,4 +12,8 @@
     <string name="user_name">Gu Yuhong</string>
     <string name="user_accout">gu18168@gmail.com</string>
     <string name="edit">个人资料</string>
+    <string name="set_title">定制个人介绍</string>
+    <string name="set_title_sub">您的信息将会被公开</string>
+    <string name="set_name">昵称</string>
+    <string name="set_intro">个性签名</string>
 </resources>

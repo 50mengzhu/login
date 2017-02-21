@@ -3,6 +3,7 @@ package com.gyh.login;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.os.Build;
@@ -27,6 +28,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.gyh.login.db.User;
 
 import static com.gyh.login.R.id.user_lv_name;
 
@@ -65,6 +69,7 @@ public class UserIndex extends AppCompatActivity {
 
         mToolbar.setTitle("");
 
+        // 设置返回按钮
         setSupportActionBar(mToolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -81,13 +86,23 @@ public class UserIndex extends AppCompatActivity {
             }
         });
 
-        String name = getIntent().getStringExtra("name");
-        String intro = getIntent().getStringExtra("intro");
+        final User user = getIntent().getParcelableExtra("user");
+        final String name = user.getName();
+        final String intro = user.getIntro();
 
         TextView lv_name = (TextView) findViewById(R.id.user_lv_name);
         TextView lv_intro = (TextView) findViewById(R.id.user_lv_intro);
         lv_name.setText(name);
         lv_intro.setText(intro);
+
+        mEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(UserIndex.this, UserSet.class);
+                intent.putExtra("user", user);
+                startActivityForResult(intent, 1);
+            }
+        });
     }
 
 
@@ -229,4 +244,17 @@ public class UserIndex extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    // 处理修改后的返回消息
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case 1:
+                if(resultCode == RESULT_OK) {
+                    Toast.makeText(UserIndex.this, "Welcome back", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+                break;
+        }
+    }
 }
