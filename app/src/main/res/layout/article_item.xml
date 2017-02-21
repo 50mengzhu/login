@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <FrameLayout
+            android:id="@+id/public_item_show"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/public_item_pic"
+                android:layout_width="match_parent"
+                android:layout_height="190dp"
+                android:scaleType="centerCrop"
+                android:contentDescription="@string/public_item_pic_desc"/>
+
+            <TextView
+                android:id="@+id/public_item_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginStart="20dp"
+                android:layout_marginBottom="16dp"
+                android:textSize="26sp"
+                android:textColor="#fff"
+                tools:text="澳大利亚沙滩 Top 10 "/>
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/public_item_intro"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingTop="18dp"
+            android:paddingBottom="12dp">
+
+            <TextView
+                android:id="@+id/public_item_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:textColor="#757575"
+                android:textSize="16sp"
+                tools:text="十一月 10"/>
+
+            <TextView
+                android:id="@+id/public_item_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:textSize="16sp"
+                android:maxLines="2"
+                tools:text="Whitehaven Beach \nWhitsunday Island, Whitsunday Islands"/>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_marginTop="13dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/public_item_share"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingEnd="20dp"
+                    android:paddingStart="0dp"
+                    android:background="@drawable/bg_ripple"
+                    android:textSize="16sp"
+                    android:textColor="#ffa000"
+                    android:text="@string/public_item_share"/>
+
+                <TextView
+                    android:id="@+id/public_item_entry"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingEnd="20dp"
+                    android:paddingStart="0dp"
+                    android:background="@drawable/bg_ripple"
+                    android:textSize="16sp"
+                    android:textColor="#ffa000"
+                    android:text="@string/public_item_entry"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

@@ -16,4 +16,7 @@
     <string name="set_title_sub">您的信息将会被公开</string>
     <string name="set_name">昵称</string>
     <string name="set_intro">个性签名</string>
+    <string name="public_item_pic_desc">封面图片</string>
+    <string name="public_item_share">分享</string>
+    <string name="public_item_entry">探索</string>
 </resources>

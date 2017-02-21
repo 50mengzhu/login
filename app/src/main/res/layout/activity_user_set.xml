@@ -92,7 +92,8 @@
         android:id="@+id/set_name"
         android:layout_below="@id/sep_2"
         android:layout_width="match_parent"
-        android:layout_height="52dp">
+        android:layout_height="52dp"
+        android:background="@drawable/bg_ripple">
 
         <TextView
             android:id="@+id/name"
@@ -158,7 +159,8 @@
         android:id="@+id/set_intro"
         android:layout_below="@id/sep_4"
         android:layout_width="match_parent"
-        android:layout_height="52dp">
+        android:layout_height="52dp"
+        android:background="@drawable/bg_ripple">
 
         <TextView
             android:id="@+id/intro"
