@@ -7,7 +7,6 @@ import com.gyh.login.db.Article;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class ArticleLab {
     private static ArticleLab sArticleLab;
@@ -33,9 +32,9 @@ public class ArticleLab {
         return mArticles;
     }
 
-    public Article getArticle(UUID id) {
+    public Article getArticle(int id) {
         for (Article article : mArticles) {
-            if (article.getId().equals(id)) {
+            if (article.getId() == id) {
                 return article;
             }
         }

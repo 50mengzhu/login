@@ -3,9 +3,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/article"
+    android:foreground="?android:attr/selectableItemBackground"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp">
+    android:layout_margin="10dp"
+    android:stateListAnimator="@anim/lift_on_touch">
 
     <LinearLayout
         android:orientation="vertical"
@@ -21,7 +24,7 @@
                 android:id="@+id/public_item_pic"
                 android:layout_width="match_parent"
                 android:layout_height="190dp"
-                android:scaleType="centerCrop"
+                android:scaleType="fitXY"
                 android:contentDescription="@string/public_item_pic_desc"/>
 
             <TextView
@@ -78,7 +81,6 @@
                     android:paddingBottom="10dp"
                     android:paddingEnd="20dp"
                     android:paddingStart="0dp"
-                    android:background="@drawable/bg_ripple"
                     android:textSize="16sp"
                     android:textColor="#ffa000"
                     android:text="@string/public_item_share"/>
@@ -91,7 +93,6 @@
                     android:paddingBottom="10dp"
                     android:paddingEnd="20dp"
                     android:paddingStart="0dp"
-                    android:background="@drawable/bg_ripple"
                     android:textSize="16sp"
                     android:textColor="#ffa000"
                     android:text="@string/public_item_entry"/>

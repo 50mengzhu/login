@@ -25,8 +25,6 @@ public class User extends DataSupport implements Parcelable{
         out.writeString(password);
         out.writeString(name);
         out.writeString(intro);
-
-
     }
 
     public static final Parcelable.Creator<User> CREATOR = new Creator<User>() {

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<transitionSet xmlns:android="http://schemas.android.com/apk/res/android">
+    <fade>
+        <targets>
+            <target android:targetId="@id/article_date" />
+            <target android:targetId="@id/article_author" />
+            <target android:targetId="@id/article_title" />
+            <target android:targetId="@id/article_author_img" />
+            <target android:targetId="@id/article_spec" />
+        </targets>
+    </fade>
+
+    <slide android:slideEdge="bottom">
+        <targets>
+            <target android:targetId="@id/article_content" />
+        </targets>
+    </slide>
+</transitionSet>

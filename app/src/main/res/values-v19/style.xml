@@ -3,4 +3,13 @@
     <style name="IndexActivityTheme" parent="AppTheme">
         <item name="android:windowTranslucentStatus">true</item>
     </style>
+
+    <style name="AppTheme.Main" parent="IndexActivityTheme">
+        <item name="android:windowExitTransition">@transition/public_exit</item>
+    </style>
+
+    <style name="AppTheme.Article" parent="IndexActivityTheme">
+        <item name="android:windowEnterTransition">@transition/article_enter</item>
+        <!--<item name="android:windowSharedElementEnterTransition">@transition/test</item>-->
+    </style>
 </resources>
