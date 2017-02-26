@@ -67,6 +67,12 @@ public class UserIndex extends AppCompatActivity {
         mLlTitleContainer = (LinearLayout) findViewById(R.id.user_ll_title);
         mEdit = (Button) findViewById(R.id.user_edit);
 
+        // 如果是他人的主页不可以修改，默认是自己的主页
+        int flag = getIntent().getIntExtra("flag", 0);
+        if (flag == 1) {
+            mEdit.setVisibility(View.GONE);
+        }
+
         mToolbar.setTitle("");
 
         // 设置返回按钮

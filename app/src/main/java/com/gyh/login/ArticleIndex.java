@@ -1,10 +1,14 @@
 package com.gyh.login;
 
 import android.animation.Animator;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -17,11 +21,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.gyh.login.bottomsheet.BottomSheetBuilder;
+import com.gyh.login.bottomsheet.BottomSheetItemClickListener;
 import com.gyh.login.db.Article;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ArticleIndex extends AppCompatActivity {
+public class ArticleIndex extends AppCompatActivity implements BottomSheetItemClickListener {
+
+    public static final String STATE_GRID = "state_grid";
+    private BottomSheetDialog mBottomSheetDialog;
+    private BottomSheetBehavior mBehavior;
+    private boolean mShowingGridDialog;
 
     // 控制ToolBar的变量
     private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.3f;
@@ -84,7 +95,7 @@ public class ArticleIndex extends AppCompatActivity {
         });
 
 
-        Article article = getIntent().getParcelableExtra("article");
+        final Article article = getIntent().getParcelableExtra("article");
         Glide.with(this).load(article.getImageId()).into(mArticlePic);
         mArticleTitle.setText(article.getTitle());
         mArticleDate.setText(article.getDate());
@@ -101,7 +112,72 @@ public class ArticleIndex extends AppCompatActivity {
                 }
             });
         }
+
+
+        // 分享按钮
+        mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onShowDialogGridClick();
+            }
+        });
+
+        mArticleAuthorImage = (CircleImageView) findViewById(R.id.article_author_img);
+        mArticleAuthorImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ArticleIndex.this, UserIndex.class);
+                intent.putExtra("user", article.getWriter());
+                intent.putExtra("flag", 1);
+                startActivity(intent);
+            }
+        });
     }
+
+    // 展示底部分享框
+    public void onShowDialogGridClick() {
+        if (mBottomSheetDialog != null) {
+            mBottomSheetDialog.dismiss();
+        }
+        mShowingGridDialog = true;
+        mBottomSheetDialog = new BottomSheetBuilder(this, R.style.AppTheme_BottomSheetDialog)
+                .setMode(BottomSheetBuilder.MODE_GRID)
+                .setAppBarLayout(mAppBarLayout)
+                .setMenu(getResources().getBoolean(R.bool.tablet_landscape)
+                        ? R.menu.menu_bottom_grid_tablet_sheet : R.menu.menu_bottom_grid_sheet)
+                .expandOnStart(true)
+                .setItemClickListener(new BottomSheetItemClickListener() {
+                    @Override
+                    public void onBottomSheetItemClick(MenuItem item) {
+                        mShowingGridDialog = false;
+                    }
+                })
+                .createDialog();
+
+        mBottomSheetDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                mShowingGridDialog = false;
+            }
+        });
+        mBottomSheetDialog.show();
+    }
+
+
+    @Override
+    public void onBottomSheetItemClick(MenuItem item) {
+        mBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+    }
+
+    @Override
+    protected void onDestroy() {
+        // Avoid leaked windows
+        if (mBottomSheetDialog != null) {
+            mBottomSheetDialog.dismiss();
+        }
+        super.onDestroy();
+    }
+
 
     // 控制FAB的显示
     private void handleAlphaOnTitle(float percentage) {
@@ -129,6 +205,7 @@ public class ArticleIndex extends AppCompatActivity {
         v.startAnimation(alphaAnimation);
     }
 
+    // 返回上一个界面
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

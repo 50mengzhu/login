@@ -24,7 +24,7 @@
                 app:contentScrim="@color/tablayout"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-                <com.gyh.login.util.BannerViewPager
+                <com.gyh.login.banner.BannerViewPager
                     android:id="@+id/banner"
                     android:layout_width="match_parent"
                     android:layout_height="225dp"

@@ -22,11 +22,11 @@ import com.arlib.floatingsearchview.FloatingSearchView;
 import com.bumptech.glide.Glide;
 import com.gyh.login.db.Ad;
 import com.gyh.login.db.User;
-import com.gyh.login.util.AdLab;
-import com.gyh.login.util.BannerViewPager;
-import com.gyh.login.util.MyFragmentPagerAdapter;
-import com.gyh.login.util.OnPageClickListener;
-import com.gyh.login.util.ViewPagerAdapter;
+import com.gyh.login.lab.AdLab;
+import com.gyh.login.banner.BannerViewPager;
+import com.gyh.login.banner.MyFragmentPagerAdapter;
+import com.gyh.login.banner.OnPageClickListener;
+import com.gyh.login.banner.ViewPagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -14,9 +14,9 @@ import android.view.ViewGroup;
 
 import com.gyh.login.db.Article;
 import com.gyh.login.db.Route;
-import com.gyh.login.util.ArticleLab;
+import com.gyh.login.lab.ArticleLab;
 import com.gyh.login.util.ArticlesAdapter;
-import com.gyh.login.util.RouteLab;
+import com.gyh.login.lab.RouteLab;
 import com.gyh.login.util.RoutesAdapter;
 
 import java.util.List;

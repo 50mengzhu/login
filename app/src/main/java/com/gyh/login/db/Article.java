@@ -56,7 +56,7 @@ public class Article extends DataSupport implements Parcelable {
         info = initInfo;
         date = initDate;
         writer = new User();
-        writer.setName("谷雨鸿");
+        writer.setName("CJJJJJ");
         writer.setIntro("酷");
     }
 

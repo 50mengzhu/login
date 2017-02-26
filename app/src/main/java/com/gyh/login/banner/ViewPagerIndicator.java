@@ -1,4 +1,4 @@
-package com.gyh.login.util;
+package com.gyh.login.banner;
 
 import android.content.Context;
 import android.graphics.Canvas;

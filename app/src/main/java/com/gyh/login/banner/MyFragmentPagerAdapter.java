@@ -1,4 +1,4 @@
-package com.gyh.login.util;
+package com.gyh.login.banner;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

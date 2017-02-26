@@ -1,4 +1,4 @@
-package com.gyh.login.util;
+package com.gyh.login.banner;
 
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
