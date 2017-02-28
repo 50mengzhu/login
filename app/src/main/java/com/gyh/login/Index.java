@@ -11,7 +11,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,13 +19,13 @@ import android.widget.TextView;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.bumptech.glide.Glide;
+import com.gyh.login.banner.BannerViewPager;
+import com.gyh.login.banner.OnPageClickListener;
+import com.gyh.login.banner.ViewPagerAdapter;
 import com.gyh.login.db.Ad;
 import com.gyh.login.db.User;
 import com.gyh.login.lab.AdLab;
-import com.gyh.login.banner.BannerViewPager;
-import com.gyh.login.banner.MyFragmentPagerAdapter;
-import com.gyh.login.banner.OnPageClickListener;
-import com.gyh.login.banner.ViewPagerAdapter;
+import com.gyh.login.util.IndexPagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +48,7 @@ public class Index extends AppCompatActivity {
 
         createViews();
 
+        // 设置ViewPager的高度填充
         NestedScrollView scrollView = (NestedScrollView) findViewById (R.id.nest_scrollview);
         scrollView.setFillViewport (true);
 
@@ -103,30 +103,22 @@ public class Index extends AppCompatActivity {
         });
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.main_pager);
-        MyFragmentPagerAdapter adapter = new MyFragmentPagerAdapter(getSupportFragmentManager(),
+        IndexPagerAdapter adapter = new IndexPagerAdapter(getSupportFragmentManager(),
                 this);
         viewPager.setAdapter(adapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
 
+        // 获得登录用户信息
         final User user = getIntent().getParcelableExtra("user");
         final String name = user.getName();
         final String intro = user.getIntro();
 
-
-        Log.d("test", "name: " + name);
-        Log.d("test", "intro: " + intro);
-        Log.d("test", "username: " + user.getUsername());
-        Log.d("test", "password: " + user.getPassword());
-
-
-
-
+        // 处理登录信息
         View headerView = navView.getHeaderView(0);
-
-        CircleImageView mIcon;
-        mIcon = (CircleImageView) headerView.findViewById(R.id.icon_image);
+        // 头像点击进入主页
+        CircleImageView mIcon = (CircleImageView) headerView.findViewById(R.id.icon_image);
         mIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

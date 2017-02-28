@@ -1,24 +1,25 @@
-package com.gyh.login.banner;
+package com.gyh.login.util;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.content.Context;
 import android.support.v4.app.FragmentPagerAdapter;
-import com.gyh.login.PageFragment;
 
-public class MyFragmentPagerAdapter extends FragmentPagerAdapter{
-    public final int COUNT = 3;
-    private String[] titles = new String[]{"路线", "广场", "其他"};
+import com.gyh.login.RoutePager;
+
+public class RoutePagerAdapter extends FragmentPagerAdapter {
+    public final int COUNT = 2;
+    private String[] titles = new String[]{"路线", "组团"};
     private Context mContext;
 
-    public MyFragmentPagerAdapter(FragmentManager fm, Context context) {
+    public RoutePagerAdapter(FragmentManager fm, Context context) {
         super(fm);
         this.mContext = context;
     }
 
     @Override
     public Fragment getItem(int position) {
-        return PageFragment.newInstance(position + 1);
+        return RoutePager.newInstance(position + 1);
     }
 
     @Override

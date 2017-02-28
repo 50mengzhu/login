@@ -23,9 +23,9 @@ public class RouteLab {
 
     private RouteLab(Context context) {
         mRoutes = new ArrayList<>();
-        Route one = new Route(R.drawable.route_1, "Biker", 300, null);
-        Route two = new Route(R.drawable.route_2, "Adventure", 500, null);
-        Route three = new Route(R.drawable.route_3, "Peaker", 400, null);
+        Route one = new Route(R.drawable.route_1, "Biker", 300);
+        Route two = new Route(R.drawable.route_2, "Adventure", 500);
+        Route three = new Route(R.drawable.route_3, "Peaker", 400);
         mRoutes.add(one);
         mRoutes.add(two);
         mRoutes.add(three);

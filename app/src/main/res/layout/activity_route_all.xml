@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <android.support.design.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/tablayout">
+
+                <android.support.v7.widget.Toolbar
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    app:layout_collapseMode="pin"/>
+
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tab_layout"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                app:tabGravity="fill"
+                app:tabMode="fixed"
+                app:tabBackground="@color/tablayout"
+                app:tabIndicatorColor="@color/tabselected"
+                app:tabIndicatorHeight="4dp"
+                app:tabSelectedTextColor="@color/tabselected"
+                app:tabTextColor="@color/tabfont"
+                app:layout_collapseMode="pin"/>
+
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/nest_scrollview"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/main_pager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        </android.support.v4.widget.NestedScrollView>
+
+        <com.arlib.floatingsearchview.FloatingSearchView
+            android:id="@+id/search_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="24dp"
+            app:floatingSearch_searchBarMarginLeft="@dimen/search_view_inset"
+            app:floatingSearch_searchBarMarginTop="@dimen/search_view_inset"
+            app:floatingSearch_searchBarMarginRight="@dimen/search_view_inset"
+            app:floatingSearch_searchHint="Search..."
+            app:floatingSearch_showSearchKey="false"
+            app:floatingSearch_leftActionMode="showHome"
+            android:translationZ="100dp"/>
+
+    <Button
+        android:layout_gravity="bottom|center"
+        android:layout_width="120dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/cond_button"
+        android:drawableEnd="@drawable/ic_cond"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:text="@string/cond_text"
+        android:textSize="14sp"/>
+
+    </android.support.design.widget.CoordinatorLayout>

@@ -1,6 +1,7 @@
 package com.gyh.login;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -11,27 +12,28 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.gyh.login.db.Article;
 import com.gyh.login.db.Route;
 import com.gyh.login.lab.ArticleLab;
-import com.gyh.login.util.ArticlesAdapter;
 import com.gyh.login.lab.RouteLab;
+import com.gyh.login.util.ArticlesAdapter;
 import com.gyh.login.util.RoutesAdapter;
 
 import java.util.List;
 
-public class PageFragment extends Fragment {
+public class IndexPager extends Fragment {
     public static final String ARGS_PAGE = "args_page";
     private int mPage;
 
     private Context mContext;
 
-    public static PageFragment newInstance(int page) {
+    public static IndexPager newInstance(int page) {
         Bundle args = new Bundle();
 
         args.putInt(ARGS_PAGE, page);
-        PageFragment fragment = new PageFragment();
+        IndexPager fragment = new IndexPager();
         fragment.setArguments(args);
         return fragment;
     }
@@ -63,6 +65,16 @@ public class PageFragment extends Fragment {
             routeItems.setLayoutManager(layoutManager);
             RoutesAdapter adapter = new RoutesAdapter(routes);
             routeItems.setAdapter(adapter);
+            // 查看更多
+            LinearLayout routeMore = (LinearLayout) view.findViewById(R.id.route_more);
+            routeMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, RouteAll.class);
+                    intent.putExtra("page", 0);
+                    mContext.startActivity(intent);
+                }
+            });
 
             RecyclerView teamItems = (RecyclerView) view.findViewById(R.id.team_items);
             teamItems.setNestedScrollingEnabled(false);
@@ -71,6 +83,16 @@ public class PageFragment extends Fragment {
             teamItems.setLayoutManager(layoutManager);
             adapter = new RoutesAdapter(routes);
             teamItems.setAdapter(adapter);
+            // 查看更多
+            LinearLayout teamMore = (LinearLayout) view.findViewById(R.id.team_more);
+            teamMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, RouteAll.class);
+                    intent.putExtra("page", 1);
+                    mContext.startActivity(intent);
+                }
+            });
         } else if (mPage == 2) {
             view = inflater.inflate(R.layout.fragment_public, container, false);
 
@@ -98,6 +120,7 @@ public class PageFragment extends Fragment {
         return view;
     }
 
+    // 刷新接口
     private void refreshArticles(final SwipeRefreshLayout swipeRefreshLayout) {
         new Handler().postDelayed(new Runnable() {
             @Override

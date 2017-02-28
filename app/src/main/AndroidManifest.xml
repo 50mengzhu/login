@@ -28,9 +28,13 @@
             android:name=".UserSet"
             android:theme="@style/IndexActivityTheme">
         </activity>
-        <activity android:name=".ArticleIndex"
-                  android:theme="@style/AppTheme.Article">
-
+        <activity
+            android:name=".ArticleIndex"
+            android:theme="@style/AppTheme.Article">
+        </activity>
+        <activity
+            android:name=".RouteAll"
+            android:theme="@style/IndexActivityTheme">
         </activity>
     </application>
 

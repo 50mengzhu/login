@@ -1,6 +1,7 @@
 package com.gyh.login.util;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.gyh.login.R;
+import com.gyh.login.UserIndex;
 import com.gyh.login.db.Route;
 
 import java.util.List;
@@ -21,6 +23,17 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
     private Context mContext;
 
     private List<Route> mRouteList;
+
+    private int flag = 0;
+    private int mItemWidth;
+
+    public void setItemWidth(int width) {
+        mItemWidth = width;
+    }
+
+    public void setFlag(int flag) {
+        this.flag = flag;
+    }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView routeImage;
@@ -47,17 +60,42 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
             mContext = parent.getContext();
         }
 
+        if (flag == 0) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.route_item, parent, false);
+
+            return new ViewHolder(view);
+        } else if (flag == 1) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.all_route_item, parent, false);
+            // 若是两列的需要计算来获取居中
+            ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+            layoutParams.width = mItemWidth;
+            view.setLayoutParams(layoutParams);
+            return new ViewHolder(view);
+        }
+
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.route_item, parent, false);
+
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Route route = mRouteList.get(position);
+        final Route route = mRouteList.get(position);
         Glide.with(mContext).load(route.getImageId()).into(holder.routeImage);
         holder.routeTitle.setText(route.getTitle());
         holder.routePrice.setText("￥" + route.getPrice());
+        holder.founderImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, UserIndex.class);
+                intent.putExtra("user", route.getFounder());
+                intent.putExtra("flag", 1);
+                mContext.startActivity(intent);
+            }
+        });
     }
 
     @Override

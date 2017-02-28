@@ -19,6 +19,15 @@ public class Route extends DataSupport {
         founder = initFounder;
     }
 
+    public Route(int initImageId, String initTitle, int initPrice) {
+        imageId = initImageId;
+        title = initTitle;
+        price = initPrice;
+        founder = new User();
+        founder.setName("CJJJJJ");
+        founder.setIntro("酷");
+    }
+
     public UUID getId() {
         return id;
     }
