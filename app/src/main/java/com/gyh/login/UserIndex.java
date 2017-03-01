@@ -107,6 +107,7 @@ public class UserIndex extends AppCompatActivity {
                 Intent intent = new Intent(UserIndex.this, UserSet.class);
                 intent.putExtra("user", user);
                 startActivityForResult(intent, 1);
+                overridePendingTransition(R.anim.in_right, R.anim.out_left);
             }
         });
     }

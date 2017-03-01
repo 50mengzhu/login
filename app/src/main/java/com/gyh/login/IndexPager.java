@@ -1,5 +1,6 @@
 package com.gyh.login;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -73,6 +74,7 @@ public class IndexPager extends Fragment {
                     Intent intent = new Intent(mContext, RouteAll.class);
                     intent.putExtra("page", 0);
                     mContext.startActivity(intent);
+                    ((Activity) mContext).overridePendingTransition(R.anim.in_right, R.anim.out_left);
                 }
             });
 
@@ -91,6 +93,7 @@ public class IndexPager extends Fragment {
                     Intent intent = new Intent(mContext, RouteAll.class);
                     intent.putExtra("page", 1);
                     mContext.startActivity(intent);
+                    ((Activity) mContext).overridePendingTransition(R.anim.in_right, R.anim.out_left);
                 }
             });
         } else if (mPage == 2) {

@@ -75,6 +75,7 @@
             app:floatingSearch_searchHint="Search..."
             app:floatingSearch_showSearchKey="false"
             app:floatingSearch_leftActionMode="showHamburger"
+            android:transitionName="search_transition"
             android:translationZ="100dp"/>
 
     </android.support.design.widget.CoordinatorLayout>

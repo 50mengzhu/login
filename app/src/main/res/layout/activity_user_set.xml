@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F5F5F5"
     tools:context="com.gyh.login.UserSet">
 
     <android.support.v7.widget.Toolbar
@@ -188,4 +189,14 @@
         android:layout_height="1dp"
         android:background="#CFD8DC"/>
 
+    <TextView
+        android:id="@+id/set_save"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:background="@drawable/bg_ripple"
+        android:text="@string/set_save"
+        android:textStyle="bold"
+        android:textColor="#000"/>
 </RelativeLayout>

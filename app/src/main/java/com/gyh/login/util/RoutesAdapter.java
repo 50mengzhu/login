@@ -7,10 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.gyh.login.R;
+import com.gyh.login.RouteIndex;
 import com.gyh.login.UserIndex;
 import com.gyh.login.db.Route;
 
@@ -40,6 +42,7 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
         TextView routeTitle;
         TextView routePrice;
         CircleImageView founderImage;
+        RelativeLayout mRoute;
 
         public ViewHolder(View view) {
             super(view);
@@ -47,6 +50,7 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
             routeTitle = (TextView) view.findViewById(R.id.route_title);
             routePrice = (TextView) view.findViewById(R.id.route_price);
             founderImage = (CircleImageView) view.findViewById(R.id.route_user_image);
+            mRoute = (RelativeLayout) view.findViewById(R.id.route);
         }
     }
 
@@ -87,6 +91,14 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
         Glide.with(mContext).load(route.getImageId()).into(holder.routeImage);
         holder.routeTitle.setText(route.getTitle());
         holder.routePrice.setText("￥" + route.getPrice());
+        holder.mRoute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, RouteIndex.class);
+                intent.putExtra("route", route);
+                mContext.startActivity(intent);
+            }
+        });
         holder.founderImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -4,12 +4,12 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
-import android.support.v7.app.AppCompatActivity;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
+import com.gyh.login.SwipeBack.SwipeBackActivity;
 import com.gyh.login.util.RoutePagerAdapter;
 
-public class RouteAll extends AppCompatActivity {
+public class RouteAll extends SwipeBackActivity {
 
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
@@ -50,7 +50,8 @@ public class RouteAll extends AppCompatActivity {
         mSearchView.setOnHomeActionClickListener(new FloatingSearchView.OnHomeActionClickListener() {
             @Override
             public void onHomeClicked() {
-                finish();
+                RouteAll.this.getTouchHelper().startSlide();
+                RouteAll.this.getTouchHelper().startAnimating(true, 0);
             }
         });
     }

@@ -3,7 +3,7 @@
           package="com.gyh.login">
 
     <application
-        android:name="org.litepal.LitePalApplication"
+        android:name=".SwipeBack.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -34,6 +34,10 @@
         </activity>
         <activity
             android:name=".RouteAll"
+            android:theme="@style/IndexActivityTheme">
+        </activity>
+        <activity
+            android:name=".RouteIndex"
             android:theme="@style/IndexActivityTheme">
         </activity>
     </application>
