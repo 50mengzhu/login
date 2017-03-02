@@ -24,6 +24,9 @@ import com.bumptech.glide.Glide;
 import com.gyh.login.bottomsheet.BottomSheetBuilder;
 import com.gyh.login.bottomsheet.BottomSheetItemClickListener;
 import com.gyh.login.db.Article;
+import com.gyh.login.db.User;
+
+import org.litepal.crud.DataSupport;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -99,7 +102,7 @@ public class ArticleIndex extends AppCompatActivity implements BottomSheetItemCl
         Glide.with(this).load(article.getImageId()).into(mArticlePic);
         mArticleTitle.setText(article.getTitle());
         mArticleDate.setText(article.getDate());
-        mArticleAuthor.setText(article.getWriter().getName());
+        mArticleAuthor.setText(DataSupport.find(User.class, article.getWriter()).getName());
 
         if (savedInstanceState == null) {
             mFloatingActionButton.setScaleX(0);

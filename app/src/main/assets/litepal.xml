@@ -1,8 +1,10 @@
 <litepal>
-    <dbname value="user" />
-    <version value="1" />
+    <dbname value="test" />
+    <version value="2" />
 
     <list>
         <mapping class="com.gyh.login.db.User" />
+        <mapping class="com.gyh.login.db.Route" />
+        <mapping class="com.gyh.login.db.Article" />
     </list>
 </litepal>

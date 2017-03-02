@@ -5,16 +5,14 @@ import android.os.Parcelable;
 
 import org.litepal.crud.DataSupport;
 
-import java.util.UUID;
-
 public class Route extends DataSupport implements Parcelable {
 
-    private UUID id;
+    private int id;
     private int imageId;
     private String title;
     private String intro;
     private int price;
-    private User founder;
+    private int founderId;
 
     @Override
     public int describeContents() {
@@ -23,11 +21,12 @@ public class Route extends DataSupport implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
         dest.writeInt(imageId);
         dest.writeString(title);
         dest.writeString(intro);
         dest.writeInt(price);
-        dest.writeParcelable(founder, flags);
+        dest.writeInt(founderId);
     }
 
     public static final Parcelable.Creator<Route> CREATOR = new Creator<Route>() {
@@ -43,37 +42,24 @@ public class Route extends DataSupport implements Parcelable {
     };
 
     public Route(Parcel in) {
+        id = in.readInt();
         imageId = in.readInt();
         title = in.readString();
         intro = in.readString();
         price = in.readInt();
-        founder = in.readParcelable(User.class.getClassLoader());
+        founderId = in.readInt();
     }
 
-    public Route(int initImageId, String initTitle, String initIntro, int initPrice, User initFounder) {
+    public Route(int initImageId, String initTitle, String initIntro, int initPrice, int initFounderId) {
         imageId = initImageId;
         title = initTitle;
         intro = initIntro;
         price = initPrice;
-        founder = initFounder;
+        founderId = initFounderId;
     }
 
-    public Route(int initImageId, String initTitle,String initIntro, int initPrice) {
-        imageId = initImageId;
-        title = initTitle;
-        intro = initIntro;
-        price = initPrice;
-        founder = new User();
-        founder.setName("CJJJJJ");
-        founder.setIntro("酷");
-    }
-
-    public UUID getId() {
+    public int getId() {
         return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 
     public int getImageId() {
@@ -100,12 +86,12 @@ public class Route extends DataSupport implements Parcelable {
         this.price = price;
     }
 
-    public User getFounder() {
-        return founder;
+    public int getFounder() {
+        return founderId;
     }
 
-    public void setFounder(User founder) {
-        this.founder = founder;
+    public void setFounder(int founderId) {
+        this.founderId = founderId;
     }
 
     public String getIntro() {

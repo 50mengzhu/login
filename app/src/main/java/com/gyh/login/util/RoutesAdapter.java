@@ -88,6 +88,7 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Route route = mRouteList.get(position);
+
         Glide.with(mContext).load(route.getImageId()).into(holder.routeImage);
         holder.routeTitle.setText(route.getTitle());
         holder.routePrice.setText("￥" + route.getPrice());

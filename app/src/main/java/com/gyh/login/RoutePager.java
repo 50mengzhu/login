@@ -11,8 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.gyh.login.db.Route;
-import com.gyh.login.lab.RouteLab;
 import com.gyh.login.util.RoutesAdapter;
+
+import org.litepal.crud.DataSupport;
 
 import java.util.List;
 
@@ -52,8 +53,7 @@ public class RoutePager extends Fragment {
             routeItems.post(new Runnable() {
                 @Override
                 public void run() {
-                    RouteLab routeLab = RouteLab.get(mContext);
-                    List<Route> routes = routeLab.getRoutes();
+                    List<Route> routes = DataSupport.findAll(Route.class);
 
                     GridLayoutManager layoutManager = new GridLayoutManager(mContext, 2);
                     routeItems.setLayoutManager(layoutManager);

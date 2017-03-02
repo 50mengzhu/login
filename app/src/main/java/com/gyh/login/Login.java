@@ -117,6 +117,7 @@ public class Login extends AppCompatActivity {
                     user.setPassword(MD5Util.getMD5(password));
                     user.setUsername(username);
                     user.setName(username);
+                    user.setStarRoutes(",");
                     user.setIntro("一句话介绍一下你自己");
                     user.save();
                     saveInfo(user);

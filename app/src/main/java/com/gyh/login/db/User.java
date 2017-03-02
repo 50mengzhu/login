@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import org.litepal.crud.DataSupport;
 
+
 public class User extends DataSupport implements Parcelable{
 
     private int id;
@@ -12,6 +13,8 @@ public class User extends DataSupport implements Parcelable{
     private String password;
     private String name;
     private String intro;
+    // 记录收藏的路线
+    private String starRoutes;
 
     @Override
     public int describeContents() {
@@ -25,6 +28,7 @@ public class User extends DataSupport implements Parcelable{
         out.writeString(password);
         out.writeString(name);
         out.writeString(intro);
+        out.writeString(starRoutes);
     }
 
     public static final Parcelable.Creator<User> CREATOR = new Creator<User>() {
@@ -45,14 +49,23 @@ public class User extends DataSupport implements Parcelable{
         password = in.readString();
         name = in.readString();
         intro = in.readString();
+        starRoutes = in.readString();
     }
 
     public User() {
-        id = 0;
         username = "username";
         password = "password";
         name = "route";
         intro = "一句话介绍一下你自己";
+        starRoutes = ",";
+    }
+
+    public String getStarRoutes() {
+        return starRoutes;
+    }
+
+    public void setStarRoutes(String starRoutes) {
+        this.starRoutes = starRoutes;
     }
 
     public String getIntro() {
@@ -73,10 +86,6 @@ public class User extends DataSupport implements Parcelable{
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getUsername() {

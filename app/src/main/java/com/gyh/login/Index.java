@@ -23,9 +23,14 @@ import com.gyh.login.banner.BannerViewPager;
 import com.gyh.login.banner.OnPageClickListener;
 import com.gyh.login.banner.ViewPagerAdapter;
 import com.gyh.login.db.Ad;
+import com.gyh.login.db.Article;
+import com.gyh.login.db.Route;
 import com.gyh.login.db.User;
 import com.gyh.login.lab.AdLab;
 import com.gyh.login.util.IndexPagerAdapter;
+import com.gyh.login.util.MD5Util;
+
+import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +38,10 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Index extends AppCompatActivity {
+
+    public static User user;
+    private List<Route> routes = DataSupport.findAll(Route.class);
+    private List<Article> articles = DataSupport.findAll(Article.class);
 
     private List<ImageView> mViews = new ArrayList<>();
 
@@ -42,11 +51,46 @@ public class Index extends AppCompatActivity {
     private FloatingSearchView mSearchView;
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        List<User> users = DataSupport.findAll(User.class);
+        String starRoutes = users.get(user.getId() - 1).getStarRoutes();
+
+        // 去除前缀 ,
+        boolean key = false;
+        String ID = "";
+        for (int i = 0; i < starRoutes.length(); i++) {
+            if(starRoutes.charAt(i) >= '0' && starRoutes.charAt(i) <= '9') {
+                key = true;
+            }
+
+            if (key) {
+                ID += starRoutes.charAt(i);
+            }
+        }
+
+        // 更新用户
+        User tmp = new User();
+        tmp.setStarRoutes(ID);
+        tmp.update(user.getId());
+        user = DataSupport.find(User.class, user.getId());
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_index);
 
         createViews();
+        user = getIntent().getParcelableExtra("user");
+
+        // 初始化路线或路线
+        if (routes.size() == 0 || articles.size() == 0) {
+            initRoutes();
+            routes = DataSupport.findAll(Route.class);
+            articles = DataSupport.findAll(Article.class);
+        }
 
         // 设置ViewPager的高度填充
         NestedScrollView scrollView = (NestedScrollView) findViewById (R.id.nest_scrollview);
@@ -94,6 +138,7 @@ public class Index extends AppCompatActivity {
                         editor.putString("username", "");
                         editor.putString("password", "");
                         editor.apply();
+                        user = null;
                         Intent intent = new Intent(Index.this, Login.class);
                         startActivity(intent);
                         finish();
@@ -111,7 +156,6 @@ public class Index extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
         // 获得登录用户信息
-        final User user = getIntent().getParcelableExtra("user");
         final String name = user.getName();
         final String intro = user.getIntro();
 
@@ -154,5 +198,29 @@ public class Index extends AppCompatActivity {
         ImageView iv = (ImageView) LayoutInflater.from(Index.this).inflate(R.layout.ad_item, mBannerViewPager, false);
         Glide.with(Index.this).load(ads.get(index).getImageId()).into(iv);
         mViews.add(iv);
+    }
+
+    /**
+     * 初始化路线
+     */
+    private void initRoutes() {
+        User founder = new User();
+        founder.setUsername("cj");
+        founder.setPassword(MD5Util.getMD5("123456"));
+        founder.setStarRoutes(",");
+        founder.setName("CJ");
+        founder.save();
+
+        Route one = new Route(R.drawable.route_1, "Biker", "西安两天两夜骑行路线", 300, founder.getId());
+        Route two = new Route(R.drawable.route_2, "Adventure", "台湾浪呀嘛浪打狼", 500, founder.getId());
+        Route three = new Route(R.drawable.route_3, "Peaker", "华山徒手攀爬历险记", 400, founder.getId());
+        one.save();
+        two.save();
+        three.save();
+
+        Article beach = new Article(R.drawable.article_1, "最美海滩", "世界上最美的十大海滩 \n再不去就老了，带上心爱的他她，说走就走", "二月 21", founder.getId());
+        Article modern = new Article(R.drawable.article_2, "现代建筑", "堪比鬼斧神工 \n看看建筑师眼中的几何与我们都有哪些不同", "二月 11", founder.getId());
+        beach.save();
+        modern.save();
     }
 }

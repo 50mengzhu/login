@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,7 +16,6 @@ import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.gyh.login.SwipeBack.SwipeBackActivity;
@@ -26,14 +26,21 @@ import com.gyh.login.bottomsheet.BottomSheetBuilder;
 import com.gyh.login.bottomsheet.BottomSheetItemClickListener;
 import com.gyh.login.db.Ad;
 import com.gyh.login.db.Route;
+import com.gyh.login.db.User;
 import com.gyh.login.lab.AdLab;
+
+import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.gyh.login.Index.user;
+
 public class RouteIndex extends SwipeBackActivity {
 
     private List<ImageView> mViews = new ArrayList<>();
+    private Route route;
+    private boolean isStar = false;
 
     private ViewPagerAdapter mAdapter;
     private BannerViewPager mBannerViewPager;
@@ -65,17 +72,21 @@ public class RouteIndex extends SwipeBackActivity {
         createViews();
 
         // 读取路线信息
-        Route route = getIntent().getParcelableExtra("route");
+        route = getIntent().getParcelableExtra("route");
+        isStar();
+
         TextView intro = (TextView) findViewById(R.id.route_intro);
         intro.setText(route.getIntro());
         TextView title = (TextView) findViewById(R.id.route_title);
         title.setText(route.getTitle());
         TextView subIntro = (TextView) findViewById(R.id.route_sub_title);
         subIntro.setText(route.getIntro());
+
+        User founder = DataSupport.find(User.class, route.getFounder());
         TextView authorName = (TextView) findViewById(R.id.route_author_name);
-        authorName.setText(route.getFounder().getName());
+        authorName.setText(founder.getName());
         TextView authorIntro = (TextView) findViewById(R.id.route_author_intro);
-        authorIntro.setText(route.getFounder().getIntro());
+        authorIntro.setText(founder.getIntro());
 
         mBannerViewPager = (BannerViewPager) findViewById(R.id.banner);
         mAdapter = new ViewPagerAdapter(mViews, new OnPageClickListener() {
@@ -108,6 +119,17 @@ public class RouteIndex extends SwipeBackActivity {
             }
         });
 
+        mToolbar.post(new Runnable() {
+            @Override
+            public void run() {
+                if (isStar) {
+                    mToolbar.getMenu().findItem(R.id.route_like).setIcon(R.drawable.ic_star_white);
+                } else {
+                    mToolbar.getMenu().findItem(R.id.route_like).setIcon(R.drawable.ic_unstar_white);
+                }
+            }
+        });
+
         mScrollView = (ScrollView) findViewById(R.id.scroll_view);
         mSep = findViewById(R.id.route_sep);
     }
@@ -120,21 +142,97 @@ public class RouteIndex extends SwipeBackActivity {
         return true;
     }
 
+    // 记录修改后结果
+    private String res = "";
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        res = "";
         switch (item.getItemId()) {
             case R.id.route_share:
+                // 分享逻辑
                 onShowDialogGridClick();
                 break;
             case R.id.route_like:
-                Toast.makeText(RouteIndex.this, "Star", Toast.LENGTH_SHORT).show();
+                // 收藏逻辑
                 if (!mIsTheTitleContainerVisible) {
-                    mToolbar.getMenu().findItem(R.id.route_like).setIcon(R.drawable.ic_star_black);
+                    if (isStar) {
+                        // 删除已收藏
+                        mToolbar.getMenu().findItem(R.id.route_like).setIcon(R.drawable.ic_unstar_black);
+                        isStar = false;
+                        String routeIds = user.getStarRoutes();
+                        String[] ids = routeIds.split(",");
+                        for(String id : ids) {
+                            // 如果ID不相等，加入id，忽略相等
+                            if(!id.equals(String.valueOf(route.getId()))) {
+                                res = res + "," + id;
+                            }
+                        }
+                        Snackbar.make(mAppBarLayout, "已取消收藏", Snackbar.LENGTH_LONG).setAction("撤销", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                mToolbar.getMenu().findItem(R.id.route_like).setIcon(R.drawable.ic_star_black);
+                                isStar = true;
+                                // 不变
+                                res = user.getStarRoutes();
+                            }
+                        }).show();
+                        user.setStarRoutes(res);
+                    } else {
+                        // 收藏
+                        mToolbar.getMenu().findItem(R.id.route_like).setIcon(R.drawable.ic_star_black);
+                        isStar = true;
+                        res = user.getStarRoutes() + "," + String.valueOf(route.getId());
+                        Snackbar.make(mAppBarLayout, "已收藏", Snackbar.LENGTH_LONG).setAction("撤销", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                mToolbar.getMenu().findItem(R.id.route_like).setIcon(R.drawable.ic_unstar_black);
+                                isStar = false;
+                                res = user.getStarRoutes();
+                            }
+                        }).show();
+                    }
                 } else {
-                    mToolbar.getMenu().findItem(R.id.route_like).setIcon(R.drawable.ic_star_white);
+                    if (isStar) {
+                        mToolbar.getMenu().findItem(R.id.route_like).setIcon(R.drawable.ic_unstar_white);
+                        isStar = false;
+                        String routeIds = user.getStarRoutes();
+                        String[] ids = routeIds.split(",");
+                        for(String id : ids) {
+                            // 如果ID不相等，加入id，忽略相等
+                            if(!id.equals(String.valueOf(route.getId()))) {
+                                res = res + "," + id;
+                            }
+                        }
+                        Snackbar.make(mAppBarLayout, "已取消收藏", Snackbar.LENGTH_LONG).setAction("撤销", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                mToolbar.getMenu().findItem(R.id.route_like).setIcon(R.drawable.ic_star_white);
+                                isStar = true;
+                                res = user.getStarRoutes();
+                            }
+                        }).show();
+                        user.setStarRoutes(res);
+                    } else {
+                        mToolbar.getMenu().findItem(R.id.route_like).setIcon(R.drawable.ic_star_white);
+                        isStar = true;
+                        res = user.getStarRoutes() + "," + String.valueOf(route.getId());
+                        Snackbar.make(mAppBarLayout, "已收藏", Snackbar.LENGTH_LONG).setAction("撤销", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                mToolbar.getMenu().findItem(R.id.route_like).setIcon(R.drawable.ic_unstar_white);
+                                isStar = false;
+                                res = user.getStarRoutes();
+                            }
+                        }).show();
+                    }
                 }
                 break;
         }
+
+        User tmp = new User();
+        tmp.setStarRoutes(res);
+        tmp.update(user.getId());
         return true;
     }
 
@@ -166,7 +264,13 @@ public class RouteIndex extends SwipeBackActivity {
                 startAlphaAnimation(mAppBarLayout, height, View.GONE);
                 mToolbar.setNavigationIcon(R.drawable.ic_back_black);
                 mToolbar.getMenu().findItem(R.id.route_share).setIcon(R.drawable.ic_share_black);
-                mToolbar.getMenu().findItem(R.id.route_like).setIcon(R.drawable.ic_unstar_black);
+
+                if (isStar) {
+                    mToolbar.getMenu().findItem(R.id.route_like).setIcon(R.drawable.ic_star_black);
+                } else {
+                    mToolbar.getMenu().findItem(R.id.route_like).setIcon(R.drawable.ic_unstar_black);
+                }
+
                 mScrollView.setVisibility(View.VISIBLE);
                 mSep.setVisibility(View.VISIBLE);
                 mIsTheTitleContainerVisible = false;
@@ -176,7 +280,13 @@ public class RouteIndex extends SwipeBackActivity {
                 startAlphaAnimation(mAppBarLayout, height, View.VISIBLE);
                 mToolbar.setNavigationIcon(R.drawable.ic_back_white);
                 mToolbar.getMenu().findItem(R.id.route_share).setIcon(R.drawable.ic_share_white);
-                mToolbar.getMenu().findItem(R.id.route_like).setIcon(R.drawable.ic_unstar_white);
+
+                if (isStar) {
+                    mToolbar.getMenu().findItem(R.id.route_like).setIcon(R.drawable.ic_star_white);
+                } else {
+                    mToolbar.getMenu().findItem(R.id.route_like).setIcon(R.drawable.ic_unstar_white);
+                }
+
                 mScrollView.setVisibility(View.GONE);
                 mSep.setVisibility(View.GONE);
                 mIsTheTitleContainerVisible = true;
@@ -222,5 +332,19 @@ public class RouteIndex extends SwipeBackActivity {
         });
         mBottomSheetDialog.show();
     }
+
+    private void isStar() {
+        String routeIds = user.getStarRoutes();
+        String[] ids = routeIds.split(",");
+        for(String id : ids) {
+            if(id.equals(String.valueOf(route.getId()))) {
+                isStar = true;
+                return;
+            }
+        }
+
+        isStar = false;
+    }
+
 
 }

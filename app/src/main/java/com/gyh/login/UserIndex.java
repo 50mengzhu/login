@@ -32,6 +32,8 @@ import android.widget.Toast;
 
 import com.gyh.login.db.User;
 
+import org.litepal.crud.DataSupport;
+
 import static com.gyh.login.R.id.user_lv_name;
 
 public class UserIndex extends AppCompatActivity {
@@ -92,7 +94,7 @@ public class UserIndex extends AppCompatActivity {
             }
         });
 
-        final User user = getIntent().getParcelableExtra("user");
+        final User user = DataSupport.find(User.class, getIntent().getIntExtra("user", 0));
         final String name = user.getName();
         final String intro = user.getIntro();
 

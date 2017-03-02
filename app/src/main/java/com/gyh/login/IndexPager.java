@@ -17,10 +17,10 @@ import android.widget.LinearLayout;
 
 import com.gyh.login.db.Article;
 import com.gyh.login.db.Route;
-import com.gyh.login.lab.ArticleLab;
-import com.gyh.login.lab.RouteLab;
 import com.gyh.login.util.ArticlesAdapter;
 import com.gyh.login.util.RoutesAdapter;
+
+import org.litepal.crud.DataSupport;
 
 import java.util.List;
 
@@ -56,8 +56,7 @@ public class IndexPager extends Fragment {
         if (mPage == 1) {
             view = inflater.inflate(R.layout.fragment_index, container, false);
 
-            RouteLab routeLab = RouteLab.get(mContext);
-            List<Route> routes = routeLab.getRoutes();
+            List<Route> routes = DataSupport.findAll(Route.class);
 
             RecyclerView routeItems = (RecyclerView) view.findViewById(R.id.route_items);
             routeItems.setNestedScrollingEnabled(false);
@@ -99,8 +98,7 @@ public class IndexPager extends Fragment {
         } else if (mPage == 2) {
             view = inflater.inflate(R.layout.fragment_public, container, false);
 
-            ArticleLab articleLab = ArticleLab.get(mContext);
-            List<Article> articles = articleLab.getArticles();
+            List<Article> articles = DataSupport.findAll(Article.class);
 
             RecyclerView articleItems = (RecyclerView) view.findViewById(R.id.public_articles);
             LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);

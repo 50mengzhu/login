@@ -12,7 +12,7 @@ public class Article extends DataSupport implements Parcelable {
     private String title;
     private String info;
     private String date;
-    private User writer;
+    private int writerId;
 
     @Override
     public int describeContents() {
@@ -26,7 +26,7 @@ public class Article extends DataSupport implements Parcelable {
         dest.writeString(title);
         dest.writeString(info);
         dest.writeString(date);
-        dest.writeParcelable(writer, flags);
+        dest.writeInt(writerId);
     }
 
     public static final Parcelable.Creator<Article> CREATOR = new Creator<Article>() {
@@ -47,25 +47,19 @@ public class Article extends DataSupport implements Parcelable {
         title = in.readString();
         info = in.readString();
         date = in.readString();
-        writer = in.readParcelable(User.class.getClassLoader());
+        writerId = in.readInt();
     }
 
-    public Article(int initImageId, String initTitle, String initInfo, String initDate) {
+    public Article(int initImageId, String initTitle, String initInfo, String initDate, int initWriterId) {
         imageId = initImageId;
         title = initTitle;
         info = initInfo;
         date = initDate;
-        writer = new User();
-        writer.setName("CJJJJJ");
-        writer.setIntro("酷");
+        writerId = initWriterId;
     }
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public int getImageId() {
@@ -100,11 +94,11 @@ public class Article extends DataSupport implements Parcelable {
         this.date = date;
     }
 
-    public User getWriter() {
-        return writer;
+    public int getWriter() {
+        return writerId;
     }
 
-    public void setWriter(User writer) {
-        this.writer = writer;
+    public void setWriter(int writerId) {
+        this.writerId = writerId;
     }
 }
