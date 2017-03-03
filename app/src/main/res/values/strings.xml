@@ -28,4 +28,7 @@
     <string name="route_expand">了解详情</string>
     <string name="route_author_intro">提供您路线的旅游达人</string>
     <string name="route_start">路线概要</string>
+    <string name="star_route">您收藏的路线</string>
+    <string name="no_star_route">您没有收藏的路线</string>
+    <string name="buyed_route">您已购买的路线</string>
 </resources>

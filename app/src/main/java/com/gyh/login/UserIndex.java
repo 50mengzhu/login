@@ -14,6 +14,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,9 +32,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gyh.login.db.Route;
 import com.gyh.login.db.User;
+import com.gyh.login.util.RoutesAdapter;
 
 import org.litepal.crud.DataSupport;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.gyh.login.R.id.user_lv_name;
 
@@ -94,7 +101,41 @@ public class UserIndex extends AppCompatActivity {
             }
         });
 
-        final User user = DataSupport.find(User.class, getIntent().getIntExtra("user", 0));
+        int index = getIntent().getIntExtra("user", 0);
+        final User user = DataSupport.find(User.class, index);
+
+        List<Route> starRoutes = new ArrayList<>();
+        boolean isEmpty = true;
+        String rawId = user.getStarRoutes();
+        String[] ids = rawId.split(",");
+        for(String id : ids) {
+            if (!id.equals("")) {
+                isEmpty = false;
+                starRoutes.add(DataSupport.find(Route.class, Integer.parseInt(id)));
+            }
+        }
+
+        if (!isEmpty) {
+            TextView noRoute = (TextView) findViewById(R.id.no_star_route);
+            noRoute.setVisibility(View.GONE);
+            final RoutesAdapter adapter = new RoutesAdapter(starRoutes);
+            adapter.setFlag(1);
+            final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.star_route_items);
+
+            recyclerView.post(new Runnable() {
+                @Override
+                public void run() {
+                    recyclerView.setNestedScrollingEnabled(false);
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(UserIndex.this);
+                    layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+                    recyclerView.setLayoutManager(layoutManager);
+                    adapter.setItemWidth((int) ((recyclerView.getWidth()) / 2.2));
+                    recyclerView.setAdapter(adapter);
+                }
+            });
+        }
+
+
         final String name = user.getName();
         final String intro = user.getIntro();
 

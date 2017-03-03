@@ -168,7 +168,7 @@ public class Index extends AppCompatActivity {
             public void onClick(View v) {
                 mDrawerLayout.closeDrawer(GravityCompat.START);
                 Intent intent = new Intent(Index.this, UserIndex.class);
-                intent.putExtra("user", user);
+                intent.putExtra("user", user.getId());
                 startActivity(intent);
             }
         });

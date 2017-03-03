@@ -28,7 +28,6 @@ public class RouteAll extends SwipeBackActivity {
         mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
         mSearchView = (FloatingSearchView) findViewById(R.id.search_view);
 
-
         RoutePagerAdapter adapter = new RoutePagerAdapter(getSupportFragmentManager(), this);
         mViewPager.setAdapter(adapter);
         // 跳转到指定界面
