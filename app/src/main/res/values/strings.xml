@@ -31,4 +31,6 @@
     <string name="star_route">您收藏的路线</string>
     <string name="no_star_route">您没有收藏的路线</string>
     <string name="buyed_route">您已购买的路线</string>
+    <string name="no_search_route">我们目前尚未拥有关于此方面的路线。</string>
+    <string name="no_search_suggestion">大家都爱的精选路线</string>
 </resources>

@@ -1,30 +1,16 @@
 package com.gyh.login;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.content.res.TypedArray;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
-import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -32,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gyh.login.SwipeBack.SwipeBackActivity;
 import com.gyh.login.db.Route;
 import com.gyh.login.db.User;
 import com.gyh.login.util.RoutesAdapter;
@@ -43,7 +30,7 @@ import java.util.List;
 
 import static com.gyh.login.R.id.user_lv_name;
 
-public class UserIndex extends AppCompatActivity {
+public class UserIndex extends SwipeBackActivity {
 
     // 控制ToolBar的变量
     private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.3f;
@@ -129,7 +116,7 @@ public class UserIndex extends AppCompatActivity {
                     LinearLayoutManager layoutManager = new LinearLayoutManager(UserIndex.this);
                     layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
                     recyclerView.setLayoutManager(layoutManager);
-                    adapter.setItemWidth((int) ((recyclerView.getWidth()) / 2.2));
+                    adapter.setItemWidth((int) ((recyclerView.getWidth()) / 1.9));
                     recyclerView.setAdapter(adapter);
                 }
             });
@@ -182,106 +169,6 @@ public class UserIndex extends AppCompatActivity {
         alphaAnimation.setDuration(duration);
         alphaAnimation.setFillAfter(true);
         v.startAnimation(alphaAnimation);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-
-        mSearchItem = menu.findItem(R.id.action_search);
-
-        MenuItemCompat.setOnActionExpandListener(mSearchItem, new MenuItemCompat.OnActionExpandListener() {
-            @Override
-            public boolean onMenuItemActionExpand(MenuItem item) {
-                animateSearchToolbar(1, true, true);
-                return true;
-            }
-
-            @Override
-            public boolean onMenuItemActionCollapse(MenuItem item) {
-                if (mSearchItem.isActionViewExpanded()) {
-                    animateSearchToolbar(1, false, false);
-                }
-                return true;
-            }
-        });
-        return true;
-    }
-
-    public void animateSearchToolbar(int numberOfMenuIcon, boolean containsOverflow, boolean show) {
-
-        mToolbar.setBackgroundColor(ContextCompat.getColor(this, android.R.color.white));
-
-        if (show) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                int width = mToolbar.getWidth() -
-                        (containsOverflow ? getResources().getDimensionPixelSize(R.dimen.abc_action_button_min_width_overflow_material) : 0) -
-                        ((getResources().getDimensionPixelSize(R.dimen.abc_action_button_min_width_material) * numberOfMenuIcon) / 2);
-                Animator createCircularReveal = ViewAnimationUtils.createCircularReveal(mToolbar,
-                        isRtl(getResources()) ? mToolbar.getWidth() - width : width, mToolbar.getHeight() / 2, 0.0f, (float) width);
-                createCircularReveal.setDuration(250);
-                createCircularReveal.start();
-            } else {
-                TranslateAnimation translateAnimation = new TranslateAnimation(0.0f, 0.0f, (float) (-mToolbar.getHeight()), 0.0f);
-                translateAnimation.setDuration(220);
-                mToolbar.clearAnimation();
-                mToolbar.startAnimation(translateAnimation);
-            }
-        } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                int width = mToolbar.getWidth() -
-                        (containsOverflow ? getResources().getDimensionPixelSize(R.dimen.abc_action_button_min_width_overflow_material) : 0) -
-                        ((getResources().getDimensionPixelSize(R.dimen.abc_action_button_min_width_material) * numberOfMenuIcon) / 2);
-                Animator createCircularReveal = ViewAnimationUtils.createCircularReveal(mToolbar,
-                        isRtl(getResources()) ? mToolbar.getWidth() - width : width, mToolbar.getHeight() / 2, (float) width, 0.0f);
-                createCircularReveal.setDuration(250);
-                createCircularReveal.addListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-                        mToolbar.setBackgroundColor(getThemeColor(UserIndex.this, R.attr.colorPrimary));
-                    }
-                });
-                createCircularReveal.start();
-            } else {
-                AlphaAnimation alphaAnimation = new AlphaAnimation(1.0f, 0.0f);
-                Animation translateAnimation = new TranslateAnimation(0.0f, 0.0f, 0.0f, (float) (-mToolbar.getHeight()));
-                AnimationSet animationSet = new AnimationSet(true);
-                animationSet.addAnimation(alphaAnimation);
-                animationSet.addAnimation(translateAnimation);
-                animationSet.setDuration(220);
-                animationSet.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        mToolbar.setBackgroundColor(getThemeColor(UserIndex.this, R.attr.colorPrimary));
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-                mToolbar.startAnimation(animationSet);
-            }
-        }
-    }
-
-    private boolean isRtl(Resources resources) {
-        return resources.getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
-    }
-
-    private static int getThemeColor(Context context, int id) {
-        Resources.Theme theme = context.getTheme();
-        TypedArray a = theme.obtainStyledAttributes(new int[]{id});
-        int result = a.getColor(0, 0);
-        a.recycle();
-        return result;
     }
 
     @Override

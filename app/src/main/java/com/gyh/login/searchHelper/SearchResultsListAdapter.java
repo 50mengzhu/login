@@ -1,4 +1,4 @@
-package com.gyh.login.util;
+package com.gyh.login.searchHelper;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,38 +7,37 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.arlib.floatingsearchview.util.Util;
 import com.bumptech.glide.Glide;
 import com.gyh.login.R;
 import com.gyh.login.RouteIndex;
 import com.gyh.login.UserIndex;
 import com.gyh.login.db.Route;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder> {
+public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResultsListAdapter.ViewHolder> {
 
-    private Context mContext;
+    private Context  mContext;
 
-    private List<Route> mRouteList;
+    private List<Route> mRoutes = new ArrayList<>();
 
-    private int flag = 0;
     private int mItemWidth;
+    private int mLastAnimatedItemPosition = -1;
 
     public void setItemWidth(int width) {
         mItemWidth = width;
     }
 
-    public void setFlag(int flag) {
-        this.flag = flag;
-    }
-
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView routeImage;
         TextView routeTitle;
         TextView routePrice;
@@ -55,8 +54,9 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
         }
     }
 
-    public RoutesAdapter(List<Route> routeList) {
-        mRouteList = routeList;
+    public void swapData(List<Route> mNewRoutes) {
+        mRoutes = mNewRoutes;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -65,34 +65,28 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
             mContext = parent.getContext();
         }
 
-        if (flag == 0) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.route_item, parent, false);
-
-            return new ViewHolder(view);
-        } else if (flag == 1) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.all_route_item, parent, false);
-            // 若是两列的需要计算来获取居中
-            ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
-            layoutParams.width = mItemWidth;
-            view.setLayoutParams(layoutParams);
-            return new ViewHolder(view);
-        }
-
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.route_item, parent, false);
-
+                .inflate(R.layout.all_route_item, parent, false);
+        // 若是两列的需要计算来获取居中
+        ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+        layoutParams.width = mItemWidth;
+        view.setLayoutParams(layoutParams);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        final Route route = mRouteList.get(position);
+    public void onBindViewHolder(ViewHolder holder, final int position) {
+        final Route route = mRoutes.get(position);
 
         Glide.with(mContext).load(route.getImageId()).into(holder.routeImage);
         holder.routeTitle.setText(route.getTitle());
         holder.routePrice.setText("￥" + route.getPrice());
+
+        if (mLastAnimatedItemPosition < position) {
+            animateItem(holder.itemView);
+            mLastAnimatedItemPosition = position;
+        }
+
         holder.mRoute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,6 +96,7 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
                 ((Activity)mContext).overridePendingTransition(R.anim.in_right, R.anim.out_left);
             }
         });
+
         holder.founderImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,6 +111,15 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
 
     @Override
     public int getItemCount() {
-        return mRouteList.size();
+        return mRoutes.size();
+    }
+
+    private void animateItem(View view) {
+        view.setTranslationY(Util.getScreenHeight((Activity) view.getContext()));
+        view.animate()
+                .translationY(0)
+                .setInterpolator(new DecelerateInterpolator(3.f))
+                .setDuration(700)
+                .start();
     }
 }

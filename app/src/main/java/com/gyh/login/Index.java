@@ -2,15 +2,18 @@ package com.gyh.login;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +21,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
+import com.arlib.floatingsearchview.suggestions.SearchSuggestionsAdapter;
+import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
+import com.arlib.floatingsearchview.util.Util;
 import com.bumptech.glide.Glide;
 import com.gyh.login.banner.BannerViewPager;
 import com.gyh.login.banner.OnPageClickListener;
@@ -27,6 +33,8 @@ import com.gyh.login.db.Article;
 import com.gyh.login.db.Route;
 import com.gyh.login.db.User;
 import com.gyh.login.lab.AdLab;
+import com.gyh.login.searchHelper.DataHelper;
+import com.gyh.login.searchHelper.RouteSuggestion;
 import com.gyh.login.util.IndexPagerAdapter;
 import com.gyh.login.util.MD5Util;
 
@@ -39,6 +47,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Index extends AppCompatActivity {
 
+    public static final long FIND_SUGGESTION_SIMULATED_DELAY = 250;
+
     public static User user;
     private List<Route> routes = DataSupport.findAll(Route.class);
     private List<Article> articles = DataSupport.findAll(Article.class);
@@ -49,6 +59,8 @@ public class Index extends AppCompatActivity {
     private BannerViewPager mBannerViewPager;
     private DrawerLayout mDrawerLayout;
     private FloatingSearchView mSearchView;
+
+    private String mLastQuery = "";
 
     @Override
     protected void onResume() {
@@ -108,17 +120,130 @@ public class Index extends AppCompatActivity {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mSearchView= (FloatingSearchView) findViewById(R.id.search_view);
 
-        //搜索逻辑
+        // 搜索推荐项显示
         mSearchView.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
             @Override
             public void onSearchTextChanged(String oldQuery, final String newQuery) {
 
-                //get suggestions based on newQuery
+                if (!oldQuery.equals("") && newQuery.equals("")) {
+                    mSearchView.clearSuggestions();
+                } else {
+                    mSearchView.showProgress();
 
-                //pass them on to the search view
-                //mSearchView.swapSuggestions(newSuggestions);
+                    DataHelper.findSuggestions(Index.this, newQuery, 5,
+                            FIND_SUGGESTION_SIMULATED_DELAY, new DataHelper.OnFindSuggestionsListener() {
+                                @Override
+                                public void onResults(List<RouteSuggestion> results) {
+                                    mSearchView.swapSuggestions(results);
+                                    mSearchView.hideProgress();
+                                }
+                            });
+                }
             }
         });
+
+        // 搜素监听事件
+        mSearchView.setOnSearchListener(new FloatingSearchView.OnSearchListener() {
+            // 推荐项点击事件
+            @Override
+            public void onSuggestionClicked(SearchSuggestion searchSuggestion) {
+                final RouteSuggestion routeSuggestion = (RouteSuggestion) searchSuggestion;
+                // 设置为是历史
+                DataHelper.addSuggestions(routeSuggestion);
+                routeSuggestion.setIsHistory(true);
+                mLastQuery = searchSuggestion.getBody();
+
+                // 如果是直接点击推荐项，则启动相应的路线界面
+                if (routeSuggestion.getId() != -1) {
+                    Route route = DataSupport.find(Route.class, routeSuggestion.getId());
+                    Intent intent = new Intent(Index.this, RouteIndex.class);
+                    intent.putExtra("route", route);
+                    startActivity(intent);
+                } else {
+                    DataHelper.findRoutes(Index.this, routeSuggestion.getBody(),
+                            new DataHelper.OnFindRoutesListener() {
+                                @Override
+                                public void onResults(List<Route> results) {
+                                    Intent intent = new Intent(Index.this, SearchResult.class);
+                                    intent.putExtra("string", routeSuggestion.getBody());
+                                    startActivity(intent);
+                                    overridePendingTransition(R.anim.in_right, R.anim.out_left);
+                                }
+                            });
+                }
+            }
+
+            // 搜索键点击
+            @Override
+            public void onSearchAction(final String currentQuery) {
+                mLastQuery = currentQuery;
+
+                // 若是点击搜索键的，则加入不是路线的历史
+                RouteSuggestion routeSuggestion = new RouteSuggestion(currentQuery, "", -1);
+                routeSuggestion.setIsRoute(false);
+                routeSuggestion.setIsHistory(true);
+                DataHelper.addSuggestions(routeSuggestion);
+
+                // 如果是点击搜索键，则显示符合条件的列表
+                DataHelper.findRoutes(Index.this, currentQuery,
+                        new DataHelper.OnFindRoutesListener() {
+                            @Override
+                            public void onResults(List<Route> results) {
+                                Intent intent = new Intent(Index.this, SearchResult.class);
+                                intent.putExtra("string", currentQuery);
+                                startActivity(intent);
+                                overridePendingTransition(R.anim.in_right, R.anim.out_left);
+                            }
+                        });
+            }
+        });
+
+        // 获得输入焦点与失去输入焦点
+        mSearchView.setOnFocusChangeListener(new FloatingSearchView.OnFocusChangeListener() {
+            @Override
+            public void onFocus() {
+                mSearchView.swapSuggestions(DataHelper.getHistory(Index.this, 3));
+            }
+
+            @Override
+            public void onFocusCleared() {
+                mSearchView.setSearchBarTitle(mLastQuery);
+            }
+        });
+
+        // 重载推荐项的样式
+        mSearchView.setOnBindSuggestionCallback(new SearchSuggestionsAdapter.OnBindSuggestionCallback() {
+            @Override
+            public void onBindSuggestion(View suggestionView, ImageView leftIcon, TextView textView, SearchSuggestion item, int itemPosition) {
+                RouteSuggestion routeSuggestion = (RouteSuggestion) item;
+                String textColor = "#000000";
+                String textLight = "#787878";
+
+                // 如果是历史项
+                if(routeSuggestion.getIsHistory()) {
+                    leftIcon.setImageDrawable(ResourcesCompat.getDrawable(getResources(),
+                            R.drawable.ic_history, null));
+                    Util.setIconColor(leftIcon, Color.parseColor(textColor));
+                    leftIcon.setAlpha(.36f);
+                }
+                // 如果是正常搜索的推荐项
+                else {
+                    leftIcon.setAlpha(.72f);
+                    leftIcon.setImageDrawable(ResourcesCompat.getDrawable(getResources(),
+                            R.drawable.ic_search_commit, null));
+                    Util.setIconColor(leftIcon, Color.parseColor(textColor));
+                }
+
+                textView.setTextColor(Color.parseColor(textColor));
+                // 替换已输入文字颜色
+                String text = routeSuggestion.getBody()
+                        .replaceFirst(mSearchView.getQuery(),
+                                "<font color=\"" + textLight + "\">" + mSearchView.getQuery() + "</font>");
+                text = text + "\t" + routeSuggestion.getRouteIntro();
+                textView.setText(Html.fromHtml(text));
+            }
+        });
+
         // 添加侧边栏
         mSearchView.attachNavigationDrawerToMenuButton(mDrawerLayout);
 
@@ -170,6 +295,7 @@ public class Index extends AppCompatActivity {
                 Intent intent = new Intent(Index.this, UserIndex.class);
                 intent.putExtra("user", user.getId());
                 startActivity(intent);
+                overridePendingTransition(R.anim.in_right, R.anim.out_left);
             }
         });
         TextView user_name = (TextView) headerView.findViewById(R.id.name);
