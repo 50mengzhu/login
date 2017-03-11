@@ -118,6 +118,7 @@ public class Login extends AppCompatActivity {
                     user.setUsername(username);
                     user.setName(username);
                     user.setStarRoutes(",");
+                    user.setMakeRoutes(",");
                     user.setIntro("一句话介绍一下你自己");
                     user.save();
                     saveInfo(user);

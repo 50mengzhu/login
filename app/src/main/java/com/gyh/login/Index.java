@@ -1,10 +1,12 @@
 package com.gyh.login;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.res.ResourcesCompat;
@@ -25,6 +27,8 @@ import com.arlib.floatingsearchview.suggestions.SearchSuggestionsAdapter;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.arlib.floatingsearchview.util.Util;
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.gyh.login.banner.BannerViewPager;
 import com.gyh.login.banner.OnPageClickListener;
 import com.gyh.login.banner.ViewPagerAdapter;
@@ -40,6 +44,14 @@ import com.gyh.login.util.MD5Util;
 
 import org.litepal.crud.DataSupport;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,9 +62,10 @@ public class Index extends AppCompatActivity {
     public static final long FIND_SUGGESTION_SIMULATED_DELAY = 250;
 
     public static User user;
-    private List<Route> routes = DataSupport.findAll(Route.class);
-    private List<Article> articles = DataSupport.findAll(Article.class);
+    public static List<Route> routes = new ArrayList<>();
+    public static List<Route> allRoutes = new ArrayList<>();
 
+    private List<Article> articles = DataSupport.findAll(Article.class);
     private List<ImageView> mViews = new ArrayList<>();
 
     private ViewPagerAdapter mAdapter;
@@ -87,6 +100,8 @@ public class Index extends AppCompatActivity {
         tmp.setStarRoutes(ID);
         tmp.update(user.getId());
         user = DataSupport.find(User.class, user.getId());
+
+        loadAllRoutes();
     }
 
     @Override
@@ -100,9 +115,25 @@ public class Index extends AppCompatActivity {
         // 初始化路线或路线
         if (routes.size() == 0 || articles.size() == 0) {
             initRoutes();
-            routes = DataSupport.findAll(Route.class);
             articles = DataSupport.findAll(Article.class);
         }
+
+        // 创立所有路线文件
+        for (Route route : routes) {
+            try {
+                Gson gson = new Gson();
+                String jsonString = gson.toJson(route);
+                String filename = route.getTitle() + "_route.json";
+                File file = new File(getFilesDir(), filename);
+                FileOutputStream fos = new FileOutputStream(file);
+                fos.write(jsonString.getBytes());
+                fos.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        loadAllRoutes();
 
         // 设置ViewPager的高度填充
         NestedScrollView scrollView = (NestedScrollView) findViewById (R.id.nest_scrollview);
@@ -155,9 +186,15 @@ public class Index extends AppCompatActivity {
 
                 // 如果是直接点击推荐项，则启动相应的路线界面
                 if (routeSuggestion.getId() != -1) {
-                    Route route = DataSupport.find(Route.class, routeSuggestion.getId());
+                    Route route = null;
+                    for (Route r : routes) {
+                        if(r.getId() == routeSuggestion.getId()) {
+                            route = r;
+                            break;
+                        }
+                    }
                     Intent intent = new Intent(Index.this, RouteIndex.class);
-                    intent.putExtra("route", route);
+                    intent.putExtra("route", route.getId());
                     startActivity(intent);
                 } else {
                     DataHelper.findRoutes(Index.this, routeSuggestion.getBody(),
@@ -302,6 +339,15 @@ public class Index extends AppCompatActivity {
         user_name.setText(name);
         TextView user_intro = (TextView) headerView.findViewById(R.id.intro);
         user_intro.setText(intro);
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_route_btn);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Index.this, MapSetUp.class);
+                startActivity(intent);
+            }
+        });
     }
 
 
@@ -334,19 +380,84 @@ public class Index extends AppCompatActivity {
         founder.setUsername("cj");
         founder.setPassword(MD5Util.getMD5("123456"));
         founder.setStarRoutes(",");
+        founder.setMakeRoutes(",1,2,");
         founder.setName("CJ");
+        founder.setIntro("看见什么玩什么");
         founder.save();
 
-        Route one = new Route(R.drawable.route_1, "Biker", "西安两天两夜骑行路线", 300, founder.getId());
-        Route two = new Route(R.drawable.route_2, "Adventure", "台湾浪呀嘛浪打狼", 500, founder.getId());
-        Route three = new Route(R.drawable.route_3, "Peaker", "华山徒手攀爬历险记", 400, founder.getId());
-        one.save();
-        two.save();
-        three.save();
+        String jsonString = loadJson(this);
+        routes = deserializeRoutes(jsonString);
 
         Article beach = new Article(R.drawable.article_1, "最美海滩", "世界上最美的十大海滩 \n再不去就老了，带上心爱的他她，说走就走", "二月 21", founder.getId());
         Article modern = new Article(R.drawable.article_2, "现代建筑", "堪比鬼斧神工 \n看看建筑师眼中的几何与我们都有哪些不同", "二月 11", founder.getId());
         beach.save();
         modern.save();
+    }
+
+    private static String loadJson(Context context) {
+        String jsonString;
+
+        try {
+            InputStream is = context.getAssets().open("Routes.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            jsonString = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return jsonString;
+    }
+
+    private static String loadAllRoutes(Context context) {
+        String jsonString;
+
+        try {
+            InputStream is = context.openFileInput("AllRoutes.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            jsonString = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return jsonString;
+    }
+
+    private static List<Route> deserializeRoutes(String jsonString) {
+        Gson gson = new Gson();
+
+        Type collectionType = new TypeToken<List<Route>>() {}.getType();
+        return gson.fromJson(jsonString, collectionType);
+    }
+
+    private void loadAllRoutes() {
+        //读取全部路线
+        allRoutes.clear();
+        try {
+            File f = getFilesDir();
+            File[] fileArray = f.listFiles();
+            for(File file : fileArray) {
+
+                if (file.getName().endsWith("route.json")) {
+                    FileInputStream fis = new FileInputStream(file);
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
+                    String line = null;
+                    StringBuilder stringBuilder = new StringBuilder();
+                    while ((line = reader.readLine()) != null) {
+                        stringBuilder.append(line);
+                    }
+                    Gson gson = new Gson();
+                    Route route = gson.fromJson(stringBuilder.toString(), Route.class);
+                    allRoutes.add(route);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

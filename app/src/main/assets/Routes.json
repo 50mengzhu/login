@@ -1,0 +1,50 @@
+[
+  {
+    "founderId": 2,
+    "id": 1,
+    "imageId": 2130837677,
+    "intro": "西安两天两夜骑行路线",
+    "price": 300,
+    "title": "Biker",
+    "markers": [
+      {
+        "longitude": 39.9,
+        "latitude": 116.3,
+        "title": "测试",
+        "snippet": "测试成功"
+      }
+    ]
+  },
+  {
+    "founderId": 2,
+    "id": 2,
+    "imageId": 2130837678,
+    "intro": "台湾浪呀嘛浪打浪",
+    "price": 500,
+    "title": "Adventure",
+    "markers": [
+      {
+        "longitude": 39.9,
+        "latitude": 116.3,
+        "title": "测试",
+        "snippet": "测试成功"
+      }
+    ]
+  },
+  {
+    "founderId": 2,
+    "id": 3,
+    "imageId": 2130837679,
+    "intro": "华山徒手攀爬历险记",
+    "price": 400,
+    "title": "Peaker",
+    "markers": [
+      {
+        "longitude": 39.9,
+        "latitude": 116.3,
+        "title": "测试",
+        "snippet": "测试成功"
+      }
+    ]
+  }
+]

@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.gyh.login.db.Article;
 import com.gyh.login.db.Route;
 import com.gyh.login.util.ArticlesAdapter;
@@ -22,6 +24,9 @@ import com.gyh.login.util.RoutesAdapter;
 
 import org.litepal.crud.DataSupport;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Type;
 import java.util.List;
 
 public class IndexPager extends Fragment {
@@ -56,7 +61,8 @@ public class IndexPager extends Fragment {
         if (mPage == 1) {
             view = inflater.inflate(R.layout.fragment_index, container, false);
 
-            List<Route> routes = DataSupport.findAll(Route.class);
+            String jsonString = loadJson(mContext);
+            List<Route> routes = deserializeRoutes(jsonString);
 
             RecyclerView routeItems = (RecyclerView) view.findViewById(R.id.route_items);
             routeItems.setNestedScrollingEnabled(false);
@@ -129,5 +135,30 @@ public class IndexPager extends Fragment {
                 swipeRefreshLayout.setRefreshing(false);
             }
         }, 2000);
+    }
+
+    private static String loadJson(Context context) {
+        String jsonString;
+
+        try {
+            InputStream is = context.getAssets().open("Routes.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            jsonString = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+
+        return jsonString;
+    }
+
+    private static List<Route> deserializeRoutes(String jsonString) {
+        Gson gson = new Gson();
+
+        Type collectionType = new TypeToken<List<Route>>() {}.getType();
+        return gson.fromJson(jsonString, collectionType);
     }
 }

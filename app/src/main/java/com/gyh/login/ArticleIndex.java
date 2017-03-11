@@ -129,7 +129,7 @@ public class ArticleIndex extends AppCompatActivity implements BottomSheetItemCl
         mArticleAuthorImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ArticleIndex.this, UserIndex.class);
+                Intent intent = new Intent(ArticleIndex.this, FounderIndex.class);
                 intent.putExtra("user", article.getWriter());
                 intent.putExtra("flag", 1);
                 startActivity(intent);

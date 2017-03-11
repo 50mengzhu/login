@@ -3,9 +3,10 @@ package com.gyh.login.db;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import org.litepal.crud.DataSupport;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Route extends DataSupport implements Parcelable {
+public class Route implements Parcelable {
 
     private int id;
     private int imageId;
@@ -13,6 +14,7 @@ public class Route extends DataSupport implements Parcelable {
     private String intro;
     private int price;
     private int founderId;
+    private List<Marker> markers;
 
     @Override
     public int describeContents() {
@@ -27,6 +29,7 @@ public class Route extends DataSupport implements Parcelable {
         dest.writeString(intro);
         dest.writeInt(price);
         dest.writeInt(founderId);
+        dest.writeList(markers);
     }
 
     public static final Parcelable.Creator<Route> CREATOR = new Creator<Route>() {
@@ -48,6 +51,8 @@ public class Route extends DataSupport implements Parcelable {
         intro = in.readString();
         price = in.readInt();
         founderId = in.readInt();
+        markers = new ArrayList<>();
+        in.writeList(markers);
     }
 
     public Route(int initImageId, String initTitle, String initIntro, int initPrice, int initFounderId) {
@@ -56,10 +61,15 @@ public class Route extends DataSupport implements Parcelable {
         intro = initIntro;
         price = initPrice;
         founderId = initFounderId;
+        markers = new ArrayList<>();
     }
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getImageId() {
@@ -100,5 +110,17 @@ public class Route extends DataSupport implements Parcelable {
 
     public void setIntro(String intro) {
         this.intro = intro;
+    }
+
+    public void addMarker(Marker marker) {
+        markers.add(marker);
+    }
+
+    public void setMarkers(List<Marker> markers) {
+        this.markers = markers;
+    }
+
+    public List<Marker> getMarkers() {
+        return this.markers;
     }
 }

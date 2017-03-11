@@ -3,9 +3,8 @@ package com.gyh.login.searchHelper;
 import android.content.Context;
 import android.widget.Filter;
 
+import com.gyh.login.Index;
 import com.gyh.login.db.Route;
-
-import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,7 +13,7 @@ import java.util.List;
 
 public class DataHelper {
 
-    private static List<Route> sRoutes = DataSupport.findAll(Route.class);
+    private static List<Route> sRoutes = Index.allRoutes;
 
     private static List<RouteSuggestion> sRouteSuggestions = new ArrayList<>();
     private static List<RouteSuggestion> sHistorySuggestions = new ArrayList<>();

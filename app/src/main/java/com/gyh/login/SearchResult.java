@@ -24,9 +24,9 @@ import com.gyh.login.searchHelper.RouteSuggestion;
 import com.gyh.login.searchHelper.SearchResultsListAdapter;
 import com.gyh.login.util.RoutesAdapter;
 
-import org.litepal.crud.DataSupport;
-
 import java.util.List;
+
+import static com.gyh.login.Index.routes;
 
 public class SearchResult extends SwipeBackActivity {
 
@@ -84,9 +84,15 @@ public class SearchResult extends SwipeBackActivity {
 
                 // 如果是直接点击推荐项，则启动相应的路线界面
                 if (routeSuggestion.getId() != -1) {
-                    Route route = DataSupport.find(Route.class, routeSuggestion.getId());
+                    Route route = null;
+                    for (Route r : routes) {
+                        if(r.getId() == routeSuggestion.getId()) {
+                            route = r;
+                            break;
+                        }
+                    }
                     Intent intent = new Intent(SearchResult.this, RouteIndex.class);
-                    intent.putExtra("route", route);
+                    intent.putExtra("route", route.getId());
                     startActivity(intent);
                 } else {
                     DataHelper.findRoutes(SearchResult.this, routeSuggestion.getBody(),
@@ -216,7 +222,7 @@ public class SearchResult extends SwipeBackActivity {
                     }
                 });
 
-        final RoutesAdapter adapter = new RoutesAdapter(DataSupport.findAll(Route.class));
+        final RoutesAdapter adapter = new RoutesAdapter(routes);
         adapter.setFlag(1);
         final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.fav_routes);
 

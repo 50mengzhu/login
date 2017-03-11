@@ -1,12 +1,15 @@
 package com.gyh.login;
 
+import android.app.ActivityOptions;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,7 +37,9 @@ import org.litepal.crud.DataSupport;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.gyh.login.Index.allRoutes;
 import static com.gyh.login.Index.user;
+import static com.gyh.login.R.drawable.map;
 
 public class RouteIndex extends SwipeBackActivity {
 
@@ -72,7 +77,12 @@ public class RouteIndex extends SwipeBackActivity {
         createViews();
 
         // 读取路线信息
-        route = getIntent().getParcelableExtra("route");
+        for (Route r : allRoutes) {
+            if (r.getId() == getIntent().getIntExtra("route", 0)) {
+                route = r;
+                break;
+            }
+        }
         isStar();
 
         TextView intro = (TextView) findViewById(R.id.route_intro);
@@ -132,6 +142,20 @@ public class RouteIndex extends SwipeBackActivity {
 
         mScrollView = (ScrollView) findViewById(R.id.scroll_view);
         mSep = findViewById(R.id.route_sep);
+
+        final ImageView mapImage = (ImageView) findViewById(R.id.route_map);
+        Glide.with(RouteIndex.this).load(map).into(mapImage);
+        mapImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ActivityOptions options =
+                        ActivityOptions.makeSceneTransitionAnimation(RouteIndex.this,
+                                Pair.create((View) mapImage, "map_transition"));
+                Intent intent = new Intent(RouteIndex.this, RouteMap.class);
+                intent.putExtra("route", route.getId());
+                startActivity(intent, options.toBundle());
+            }
+        });
     }
 
     @Override
@@ -342,7 +366,6 @@ public class RouteIndex extends SwipeBackActivity {
                 return;
             }
         }
-
         isStar = false;
     }
 

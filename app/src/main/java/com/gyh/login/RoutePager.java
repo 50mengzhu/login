@@ -10,12 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.gyh.login.db.Route;
 import com.gyh.login.util.RoutesAdapter;
 
-import org.litepal.crud.DataSupport;
-
-import java.util.List;
+import static com.gyh.login.Index.allRoutes;
 
 public class RoutePager extends Fragment {
     public static final String ARGS_PAGE = "args_page";
@@ -53,11 +50,9 @@ public class RoutePager extends Fragment {
             routeItems.post(new Runnable() {
                 @Override
                 public void run() {
-                    List<Route> routes = DataSupport.findAll(Route.class);
-
                     GridLayoutManager layoutManager = new GridLayoutManager(mContext, 2);
                     routeItems.setLayoutManager(layoutManager);
-                    RoutesAdapter adapter = new RoutesAdapter(routes);
+                    RoutesAdapter adapter = new RoutesAdapter(allRoutes);
                     adapter.setFlag(1);
                     adapter.setItemWidth((int) ((routeItems.getWidth()) / 2));
                     routeItems.setAdapter(adapter);

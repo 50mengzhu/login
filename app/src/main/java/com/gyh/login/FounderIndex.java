@@ -1,6 +1,5 @@
 package com.gyh.login;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -16,7 +15,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.gyh.login.SwipeBack.SwipeBackActivity;
 import com.gyh.login.db.Route;
@@ -28,9 +26,10 @@ import org.litepal.crud.DataSupport;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.gyh.login.Index.routes;
 import static com.gyh.login.R.id.user_lv_name;
 
-public class UserIndex extends SwipeBackActivity {
+public class FounderIndex extends SwipeBackActivity {
 
     // 控制ToolBar的变量
     private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.3f;
@@ -42,8 +41,6 @@ public class UserIndex extends SwipeBackActivity {
     private ImageView mIvBg;
     private AppBarLayout mAppBarLayout;
     private Toolbar mToolbar;
-    private TextView mUsername;
-    private TextView mUserintro;
     private FrameLayout mTitleContainer;
     private LinearLayout mLlTitleContainer;
     private Button mEdit;
@@ -52,22 +49,14 @@ public class UserIndex extends SwipeBackActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_index);
+        setContentView(R.layout.activity_founder_index);
 
         mIvBg = (ImageView) findViewById(R.id.user_iv_bg);
         mAppBarLayout = (AppBarLayout) findViewById(R.id.user_appbar);
         mToolbar = (Toolbar) findViewById(R.id.user_toolbar);
-        mUsername = (TextView) findViewById(user_lv_name);
-        mUserintro = (TextView) findViewById(R.id.user_lv_intro);
         mTitleContainer = (FrameLayout) findViewById(R.id.user_lv_title);
         mLlTitleContainer = (LinearLayout) findViewById(R.id.user_ll_title);
         mEdit = (Button) findViewById(R.id.user_edit);
-
-        // 如果是他人的主页不可以修改，默认是自己的主页
-        int flag = getIntent().getIntExtra("flag", 0);
-        if (flag == 1) {
-            mEdit.setVisibility(View.GONE);
-        }
 
         mToolbar.setTitle("");
 
@@ -93,13 +82,13 @@ public class UserIndex extends SwipeBackActivity {
 
         List<Route> starRoutes = new ArrayList<>();
         boolean isEmpty = true;
-        String rawId = user.getStarRoutes();
+        String rawId = user.getMakeRoutes();
         String[] ids = rawId.split(",");
         for(String id : ids) {
             if (!id.equals("")) {
                 isEmpty = false;
-                for (Route route : Index.routes) {
-                    if (route.getId() == Integer.parseInt(id)) {
+                for (Route route : routes) {
+                    if(route.getId() == Integer.parseInt(id)) {
                         starRoutes.add(route);
                         break;
                     }
@@ -108,17 +97,15 @@ public class UserIndex extends SwipeBackActivity {
         }
 
         if (!isEmpty) {
-            TextView noRoute = (TextView) findViewById(R.id.no_star_route);
-            noRoute.setVisibility(View.GONE);
             final RoutesAdapter adapter = new RoutesAdapter(starRoutes);
-            adapter.setFlag(1);
+            adapter.setFlag(2);
             final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.star_route_items);
 
             recyclerView.post(new Runnable() {
                 @Override
                 public void run() {
                     recyclerView.setNestedScrollingEnabled(false);
-                    LinearLayoutManager layoutManager = new LinearLayoutManager(UserIndex.this);
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(FounderIndex.this);
                     layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
                     recyclerView.setLayoutManager(layoutManager);
                     adapter.setItemWidth((int) ((recyclerView.getWidth()) / 1.9));
@@ -131,20 +118,10 @@ public class UserIndex extends SwipeBackActivity {
         final String name = user.getName();
         final String intro = user.getIntro();
 
-        TextView lv_name = (TextView) findViewById(R.id.user_lv_name);
+        TextView lv_name = (TextView) findViewById(user_lv_name);
         TextView lv_intro = (TextView) findViewById(R.id.user_lv_intro);
         lv_name.setText(name);
         lv_intro.setText(intro);
-
-        mEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(UserIndex.this, UserSet.class);
-                intent.putExtra("user", user);
-                startActivityForResult(intent, 1);
-                overridePendingTransition(R.anim.in_right, R.anim.out_left);
-            }
-        });
     }
 
 
@@ -153,13 +130,11 @@ public class UserIndex extends SwipeBackActivity {
         if (percentage >= PERCENTAGE_TO_HIDE_TITLE_DETAILS) {
             if (mIsTheTitleContainerVisible) {
                 startAlphaAnimation(mLlTitleContainer, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
-                startAlphaAnimation(mEdit, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
                 mIsTheTitleContainerVisible = false;
             }
         } else {
             if (!mIsTheTitleContainerVisible) {
                 startAlphaAnimation(mLlTitleContainer, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
-                startAlphaAnimation(mEdit, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
                 mIsTheTitleContainerVisible = true;
             }
         }
@@ -186,17 +161,4 @@ public class UserIndex extends SwipeBackActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    // 处理修改后的返回消息
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case 1:
-                if(resultCode == RESULT_OK) {
-                    Toast.makeText(UserIndex.this, "Welcome back", Toast.LENGTH_SHORT).show();
-                }
-                break;
-            default:
-                break;
-        }
-    }
 }

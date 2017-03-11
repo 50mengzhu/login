@@ -160,9 +160,16 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:text="@string/route_start"
                 android:textSize="22sp"
                 android:textColor="#333"/>
+
+            <ImageView
+                android:transitionName="map_transition"
+                android:id="@+id/route_map"
+                android:layout_width="match_parent"
+                android:layout_height="320dp"/>
         </LinearLayout>
 
     </ScrollView>

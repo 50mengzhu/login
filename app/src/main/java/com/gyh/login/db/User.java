@@ -15,6 +15,9 @@ public class User extends DataSupport implements Parcelable{
     private String intro;
     // 记录收藏的路线
     private String starRoutes;
+    // 记录制作的路线
+    private String makeRoutes;
+
 
     @Override
     public int describeContents() {
@@ -29,6 +32,7 @@ public class User extends DataSupport implements Parcelable{
         out.writeString(name);
         out.writeString(intro);
         out.writeString(starRoutes);
+        out.writeString(makeRoutes);
     }
 
     public static final Parcelable.Creator<User> CREATOR = new Creator<User>() {
@@ -50,6 +54,7 @@ public class User extends DataSupport implements Parcelable{
         name = in.readString();
         intro = in.readString();
         starRoutes = in.readString();
+        makeRoutes = in.readString();
     }
 
     public User() {
@@ -58,6 +63,15 @@ public class User extends DataSupport implements Parcelable{
         name = "route";
         intro = "一句话介绍一下你自己";
         starRoutes = ",";
+        makeRoutes = ",";
+    }
+
+    public String getMakeRoutes() {
+        return makeRoutes;
+    }
+
+    public void setMakeRoutes(String makeRoutes) {
+        this.makeRoutes = makeRoutes;
     }
 
     public String getStarRoutes() {

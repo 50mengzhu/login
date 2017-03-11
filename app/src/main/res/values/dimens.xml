@@ -20,4 +20,5 @@
     <bool name="landscape">false</bool>
     <bool name="tablet_landscape">false</bool>
     <integer name="bottomsheet_grid_columns">3</integer>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>

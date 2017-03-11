@@ -14,9 +14,9 @@ import android.widget.TextView;
 
 import com.arlib.floatingsearchview.util.Util;
 import com.bumptech.glide.Glide;
+import com.gyh.login.FounderIndex;
 import com.gyh.login.R;
 import com.gyh.login.RouteIndex;
-import com.gyh.login.UserIndex;
 import com.gyh.login.db.Route;
 
 import java.util.ArrayList;
@@ -100,7 +100,7 @@ public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResults
         holder.founderImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, UserIndex.class);
+                Intent intent = new Intent(mContext, FounderIndex.class);
                 intent.putExtra("user", route.getFounder());
                 intent.putExtra("flag", 1);
                 mContext.startActivity(intent);
