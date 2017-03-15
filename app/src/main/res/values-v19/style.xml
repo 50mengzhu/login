@@ -10,6 +10,5 @@
 
     <style name="AppTheme.Article" parent="IndexActivityTheme">
         <item name="android:windowEnterTransition">@transition/article_enter</item>
-        <!--<item name="android:windowSharedElementEnterTransition">@transition/test</item>-->
     </style>
 </resources>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="@dimen/item_margin_left_right"
+              android:layout_marginRight="@dimen/item_margin_left_right">
+
+    <LinearLayout
+        android:layout_width="@dimen/item_circle_width_height"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="@dimen/item_line_first_height"
+            android:layout_marginBottom="@dimen/item_line_first_margin"
+            android:background="#BDBDBD" />
+
+        <com.gyh.login.Stepper.RoundedView
+            android:id="@+id/roundedView"
+            android:layout_width="@dimen/item_circle_width_height"
+            android:layout_height="@dimen/item_circle_width_height"/>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/item_line_first_margin"
+            android:background="#BDBDBD" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/item_margin_bottom_active"
+        android:layout_marginLeft="@dimen/item_text_margin_left"
+        android:layout_marginStart="@dimen/item_text_margin_left"
+        android:layout_marginTop="@dimen/item_text_margin_top"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textViewLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/LabelActive"
+            tools:text="Main label of step"/>
+
+        <TextView
+            android:id="@+id/textViewSubLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/SubLabelActive"
+            tools:text="sub label of step"/>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/frameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/item_frame_margin_top_bottom"
+                android:layout_marginTop="@dimen/item_frame_margin_top_bottom"
+                android:background="#ccc"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/buttonContinue"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/step_continue"/>
+
+                <Button
+                    android:id="@+id/buttonCancel"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/step_cancel"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

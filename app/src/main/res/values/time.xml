@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="timearray">
+        <item>预计时间</item>
+        <item>少于10分钟</item>
+        <item>10至30分钟</item>
+        <item>30至60分钟</item>
+        <item>大于60分钟</item>
+    </string-array>
+</resources>

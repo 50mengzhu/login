@@ -14,6 +14,7 @@ public class Route implements Parcelable {
     private String intro;
     private int price;
     private int founderId;
+    private int zoom;
     private List<Marker> markers;
 
     @Override
@@ -29,6 +30,7 @@ public class Route implements Parcelable {
         dest.writeString(intro);
         dest.writeInt(price);
         dest.writeInt(founderId);
+        dest.writeInt(zoom);
         dest.writeList(markers);
     }
 
@@ -51,16 +53,18 @@ public class Route implements Parcelable {
         intro = in.readString();
         price = in.readInt();
         founderId = in.readInt();
+        zoom = in.readInt();
         markers = new ArrayList<>();
         in.writeList(markers);
     }
 
-    public Route(int initImageId, String initTitle, String initIntro, int initPrice, int initFounderId) {
+    public Route(int initImageId, String initTitle, String initIntro, int initPrice, int initFounderId, int initZoom) {
         imageId = initImageId;
         title = initTitle;
         intro = initIntro;
         price = initPrice;
         founderId = initFounderId;
+        zoom = initZoom;
         markers = new ArrayList<>();
     }
 
@@ -122,5 +126,9 @@ public class Route implements Parcelable {
 
     public List<Marker> getMarkers() {
         return this.markers;
+    }
+
+    public int getZoom() {
+        return zoom;
     }
 }

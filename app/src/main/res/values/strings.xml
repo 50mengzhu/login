@@ -40,4 +40,14 @@
     <string name="add_final">设置终点</string>
     <string name="add_done">完成路线</string>
 
+    <string name="marker_title">定制地点信息</string>
+    <string name="marker_sub_title">重要：它们能让其他用户更好再体验您的路线</string>
+    <string name="set_marker_name">名称</string>
+    <string name="set_marker_intro">一句话介绍</string>
+    <string name="set_marker_method">路途备注 //建议填写注意点，如几路公交车</string>
+
+    <string name="step_continue">继续</string>
+    <string name="step_finish">完成</string>
+    <string name="step_cancel">上一步</string>
+
 </resources>

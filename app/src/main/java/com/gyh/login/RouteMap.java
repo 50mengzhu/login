@@ -35,7 +35,7 @@ public class RouteMap extends MapActivity {
 
         mMapView = (MapView) findViewById(R.id.mapview);
         TencentMap tencentMap = mMapView.getMap();
-        tencentMap.setZoom(17);
+        tencentMap.setZoom(route.getZoom());
 
         double initLongitude = 0;
         double initLatitude = 0;
@@ -44,8 +44,8 @@ public class RouteMap extends MapActivity {
             LatLng startPos = new LatLng(marker.getLongitude(), marker.getLatitude());
             com.tencent.mapsdk.raster.model.Marker m = tencentMap.addMarker(new MarkerOptions()
                     .position(startPos)
-                    .title(marker.getTitle())
-                    .snippet(marker.getSnippet())
+                    .title(marker.getTitle() + " - " + marker.getSnippet())
+                    .snippet(marker.getMethod() + " (" + marker.getTime() + ")")
                     .anchor(.5f, .5f)
                     .draggable(false)
                     .icon(BitmapDescriptorFactory.defaultMarker()));

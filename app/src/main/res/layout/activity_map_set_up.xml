@@ -32,4 +32,12 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:background="@drawable/add_close_button"/>
+
+    <com.gyh.login.banner.ViewPagerIndicator
+        android:id="@+id/indicator"
+        android:layout_above="@id/step_btn"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="4dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 </RelativeLayout>

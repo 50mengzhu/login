@@ -1,11 +1,19 @@
 package com.gyh.login;
 
+import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
@@ -27,6 +35,8 @@ import java.util.regex.Pattern;
 
 public class Login extends AppCompatActivity {
 
+    private final int CODE_FOR_WRITE_PERMISSION = 1;
+
     private ImageView bgPicImg;
     private LinearLayout registPart;
 
@@ -46,6 +56,13 @@ public class Login extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_login);
+
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        CODE_FOR_WRITE_PERMISSION);
+            }
+        }
 
         // 已登录，自动登陆逻辑
         SharedPreferences sharedPreferences = getSharedPreferences("config", 0);
@@ -129,6 +146,50 @@ public class Login extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == CODE_FOR_WRITE_PERMISSION) {
+
+            // 给予权限或者拒绝逻辑
+            if (permissions[0].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE) &&
+            grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            } else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("请给予相关权限后使用！");
+                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+                builder.create().show();
+
+                // 如果点击了不再询问的弹窗
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (!shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                        AlertDialog.Builder b = new AlertDialog.Builder(this);
+                        b.setTitle("需要权限！");
+                        b.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+                        b.setPositiveButton("设置", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                intent.setData(Uri.parse("package:" + getPackageName())); // 根据包名打开对应的设置界面
+                                startActivity(intent);
+                            }
+                        });
+                        b.create().show();
+                    }
+                }
+            }
+        }
     }
 
     /**

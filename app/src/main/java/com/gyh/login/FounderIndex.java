@@ -26,7 +26,7 @@ import org.litepal.crud.DataSupport;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.gyh.login.Index.routes;
+import static com.gyh.login.Index.allRoutes;
 import static com.gyh.login.R.id.user_lv_name;
 
 public class FounderIndex extends SwipeBackActivity {
@@ -80,16 +80,16 @@ public class FounderIndex extends SwipeBackActivity {
         int index = getIntent().getIntExtra("user", 0);
         final User user = DataSupport.find(User.class, index);
 
-        List<Route> starRoutes = new ArrayList<>();
+        List<Route> makeRoutes = new ArrayList<>();
         boolean isEmpty = true;
         String rawId = user.getMakeRoutes();
         String[] ids = rawId.split(",");
         for(String id : ids) {
             if (!id.equals("")) {
                 isEmpty = false;
-                for (Route route : routes) {
+                for (Route route : allRoutes) {
                     if(route.getId() == Integer.parseInt(id)) {
-                        starRoutes.add(route);
+                        makeRoutes.add(route);
                         break;
                     }
                 }
@@ -97,7 +97,7 @@ public class FounderIndex extends SwipeBackActivity {
         }
 
         if (!isEmpty) {
-            final RoutesAdapter adapter = new RoutesAdapter(starRoutes);
+            final RoutesAdapter adapter = new RoutesAdapter(makeRoutes);
             adapter.setFlag(2);
             final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.star_route_items);
 

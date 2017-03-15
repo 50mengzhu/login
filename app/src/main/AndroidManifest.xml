@@ -73,6 +73,11 @@
             android:name=".RouteMap"
             android:theme="@style/IndexActivityTheme">
         </activity>
+        <activity
+            android:name=".MarkerSet"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:theme="@style/IndexActivityTheme">
+        </activity>
     </application>
 
 </manifest>
