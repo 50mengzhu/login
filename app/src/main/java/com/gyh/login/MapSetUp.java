@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -50,8 +49,7 @@ public class MapSetUp extends MapActivity {
     private int flag = 0;
     // 限制起点终点只能有一个
     private int sum = 0;
-    private List<com.gyh.login.db.Marker> markers = new ArrayList<>();
-    private List<Marker> rawMarkers = new ArrayList<>();
+    public static List<com.gyh.login.db.Marker> markers = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,41 +135,13 @@ public class MapSetUp extends MapActivity {
 
                         // 优化图片放缩
                         tencentMap.zoomToSpan(new LatLng(left, bottom - tmpF*5), new LatLng(right, top + tmpF*5));
-                        Log.d("Test", "onClick: " + tencentMap.getZoomLevel());
                     }
                 } else if (mStepButton.getText() == getText(R.string.add_done)) {
                     mIndicator.setPositionAndOffset(4, 0);
-                    Route route = new Route(R.drawable.route_1, "BBBBiker", "带上女朋友来骑车", 300, user.getId(), tencentMap.getZoomLevel());
-                    route.setId(allRoutes.size() + 1);
-                    route.setMarkers(markers);
 
-                    // 截图
-                    tencentMap.getScreenShot(new TencentMap.OnScreenShotListener() {
-                        @Override
-                        public void onMapScreenShot(Bitmap bitmap) {
-                            saveImageToGallery(MapSetUp.this, bitmap);
-                        }
-                    });
-
-                    User tmp = new User();
-                    tmp.setMakeRoutes(user.getMakeRoutes() + "," + route.getId());
-                    tmp.update(user.getId());
-
-                    Gson gson = new Gson();
-                    String jsonString = gson.toJson(route);
-
-                    // 新建路线文件
-                    try {
-                        String filename = route.getTitle() + "_route.json";
-                        File file = new File(getFilesDir(), filename);
-                        FileOutputStream fos = new FileOutputStream(file);
-                        fos.write(jsonString.getBytes());
-                        fos.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    finish();
+                    // 打开总结页面
+                    Intent intent = new Intent(MapSetUp.this, MapSet.class);
+                    startActivityForResult(intent, 2);
                 }
             }
         });
@@ -258,7 +228,7 @@ public class MapSetUp extends MapActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK && requestCode != 2) {
             String title = data.getStringExtra("title");
             String intro = data.getStringExtra("intro");
             String method = data.getStringExtra("method");
@@ -290,6 +260,11 @@ public class MapSetUp extends MapActivity {
                     }
                     break;
             }
+        } else if (resultCode == RESULT_OK && requestCode == 2) {
+            String routeTitle = data.getStringExtra("routeTitle");
+            String routeIntro = data.getStringExtra("routeIntro");
+            saveRoute(routeTitle, routeIntro);
+            finish();
         }
     }
 
@@ -342,5 +317,38 @@ public class MapSetUp extends MapActivity {
         }
         // 最后通知图库更新
         context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + file.getAbsolutePath())));
+    }
+
+    private void saveRoute(String routeTitle, String routeIntro) {
+        Route route = new Route(R.drawable.route_1, routeTitle, routeIntro, 300, user.getId(), tencentMap.getZoomLevel());
+        route.setId(allRoutes.size() + 1);
+        route.setMarkers(markers);
+
+        // 截图
+        tencentMap.getScreenShot(new TencentMap.OnScreenShotListener() {
+            @Override
+            public void onMapScreenShot(Bitmap bitmap) {
+                saveImageToGallery(MapSetUp.this, bitmap);
+            }
+        });
+
+        // 更新制作者制作路线信息
+        User tmp = new User();
+        tmp.setMakeRoutes(user.getMakeRoutes() + "," + route.getId());
+        tmp.update(user.getId());
+
+        Gson gson = new Gson();
+        String jsonString = gson.toJson(route);
+
+        // 新建路线文件
+        try {
+            String filename = route.getTitle() + "_route.json";
+            File file = new File(getFilesDir(), filename);
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(jsonString.getBytes());
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

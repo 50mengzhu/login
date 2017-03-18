@@ -18,7 +18,7 @@
     <application
         android:name=".SwipeBack.MyApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -75,7 +75,11 @@
         </activity>
         <activity
             android:name=".MarkerSet"
-            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:theme="@style/IndexActivityTheme"
+            android:windowSoftInputMode="stateHidden|adjustPan">
+        </activity>
+        <activity
+            android:name=".MapSet"
             android:theme="@style/IndexActivityTheme">
         </activity>
     </application>

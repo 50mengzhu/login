@@ -187,7 +187,7 @@ public class Index extends AppCompatActivity {
                 // 如果是直接点击推荐项，则启动相应的路线界面
                 if (routeSuggestion.getId() != -1) {
                     Route route = null;
-                    for (Route r : routes) {
+                    for (Route r : allRoutes) {
                         if(r.getId() == routeSuggestion.getId()) {
                             route = r;
                             break;
@@ -442,13 +442,6 @@ public class Index extends AppCompatActivity {
             File f = getFilesDir();
             File[] fileArray = f.listFiles();
             for(File file : fileArray) {
-//                Log.d("Test", "loadAllRoutes: " + file.getName());
-//                if (file.getName().equals("RoutePic")) {
-//                    File[] array = file.listFiles();
-//                    for (File fe : array) {
-//                        Log.d("Test", "RoutePic: " + fe.getName());
-//                    }
-//                }
                 if (file.getName().endsWith("route.json")) {
                     FileInputStream fis = new FileInputStream(file);
                     BufferedReader reader = new BufferedReader(new InputStreamReader(fis));

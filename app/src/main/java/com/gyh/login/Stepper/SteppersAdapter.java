@@ -145,6 +145,8 @@ public class SteppersAdapter extends RecyclerView.Adapter<SteppersViewHolder> {
                         MarkerSet.method = MethodFragment.method;
                         MarkerSet.time = MethodFragment.time;
                         MarkerSet.tag = MethodFragment.tagInput.getText().toString();
+                        MethodFragment.method = "到达方式";
+                        MethodFragment.time = "预计时间";
                         mConfig.getOnFinishAction().onFinish();
                     }
                 }

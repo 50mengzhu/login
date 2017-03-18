@@ -1,0 +1,96 @@
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="250dp"
+    android:layout_marginTop="16dp">
+
+    <android.support.percent.PercentRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/marker_info"
+            android:layout_centerHorizontal="true"
+            android:layout_height="0dp"
+            app:layout_heightPercent="72%"
+            android:layout_width="0dp"
+            app:layout_widthPercent="92%"
+            app:cardCornerRadius="10dip">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:background="@drawable/marker_card">
+
+                <ImageView
+                    android:id="@+id/marker_img"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_add_img"/>
+
+                <TextView
+                    android:gravity="center"
+                    android:layout_marginTop="4dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/set_marker_img"
+                    android:textColor="#666"
+                    android:textSize="17sp"/>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <LinearLayout
+            android:id="@+id/marker_main"
+            android:orientation="vertical"
+            android:layout_below="@id/marker_info"
+            android:layout_centerHorizontal="true"
+            android:layout_width="0dp"
+            app:layout_widthPercent="84%"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_ripple">
+
+            <TextView
+                android:id="@+id/marker_title"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="2dp"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="#333"
+                android:textStyle="bold"
+                tools:text="marker标题"/>
+
+            <TextView
+                android:id="@+id/marker_intro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="4dp"
+                android:textColor="#666"
+                android:textSize="14sp"
+                tools:text="marker介绍"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@drawable/shadow" />
+        </LinearLayout>
+    </android.support.percent.PercentRelativeLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/marker_fab"
+        android:layout_width="54dp"
+        android:layout_height="54dp"
+        app:fabSize="normal"
+        app:borderWidth="0dp"
+        android:backgroundTint="@android:color/holo_orange_dark"
+        android:layout_gravity="bottom"
+        android:layout_margin="50dp"/>
+</FrameLayout>

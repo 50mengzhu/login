@@ -14,8 +14,8 @@ import com.gyh.login.R;
 
 public class MethodFragment extends Fragment {
 
-    public static String method = "";
-    public static String time = "";
+    public static String method = "到达方式";
+    public static String time = "预计时间";
 
     private Spinner methodSpinner;
     private Spinner timeSpinner;

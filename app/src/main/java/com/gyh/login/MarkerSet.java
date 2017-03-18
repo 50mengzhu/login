@@ -27,7 +27,7 @@ public class MarkerSet extends AppCompatActivity {
     public static String time = "预计时间";
     public static String tag = "";
 
-    private void reset() {
+    public void reset() {
         title = "";
         intro = "";
         method = "到达方式";
@@ -124,6 +124,8 @@ public class MarkerSet extends AppCompatActivity {
             intro = getIntent().getStringExtra("snippet");
             method = getIntent().getStringExtra("method");
             time = getIntent().getStringExtra("time");
+            MethodFragment.method = method;
+            MethodFragment.time = time;
         }
     }
 }

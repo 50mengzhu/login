@@ -50,4 +50,8 @@
     <string name="step_finish">完成</string>
     <string name="step_cancel">上一步</string>
 
+    <string name="set_route_name">路线名称</string>
+    <string name="set_route_intro">路线介绍</string>
+    <string name="set_marker_img">设置地点图片及游玩指南</string>
+
 </resources>
